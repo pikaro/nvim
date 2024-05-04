@@ -1,3 +1,28 @@
+local vim = vim or {}
+
+local function get_hl(group)
+	local status, hl = pcall(vim.api.nvim_get_hl_by_name, group, true)
+	if not status then
+		return {}
+	end
+	return hl
+end
+
+local function set_hl(group, opts)
+	local hl = get_hl(group)
+	-- Dump the current highlight group to file
+	local f = io.open("/tmp/hl" .. group .. ".txt", "w")
+	f:write(vim.inspect(hl))
+
+	for key, value in pairs(opts) do
+		hl[key] = value
+	end
+
+	f:write(vim.inspect(hl))
+	f:close()
+	vim.api.nvim_set_hl(0, group, hl)
+end
+
 vim.opt.termguicolors = true
 vim.opt.background = "dark"
 vim.g.gruvbox_italic = 1
@@ -15,12 +40,8 @@ vim.g.vimsyn_embed = "lPr"
 vim.opt.pumheight = 5
 
 -- Switch between two colorschemes when switching windows
-vim.api.nvim_set_hl(0, "ActiveWindow", { bg = "#1c1c1c", fg = vim.api.nvim_get_hl_by_name("Normal", true).foreground })
-vim.api.nvim_set_hl(
-	0,
-	"InactiveWindow",
-	{ bg = "#262626", fg = vim.api.nvim_get_hl_by_name("Normal", true).foreground }
-)
+set_hl("ActiveWindow", { bg = "#1c1c1c", fg = get_hl("Normal").foreground })
+set_hl("InactiveWindow", { bg = "#262626", fg = get_hl("Normal").foreground })
 
 local function update_winhighlight(is_active)
 	local hl_group = is_active and "ActiveWindow" or "InactiveWindow"

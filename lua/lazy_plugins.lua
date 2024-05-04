@@ -10,7 +10,7 @@ local plugins = {
 	"jez/vim-superman",
 	"lepture/vim-jinja",
 	"mfussenegger/nvim-ansible",
-	"morhetz/gruvbox",
+	"ellisonleao/gruvbox.nvim",
 	"neovim/nvim-lspconfig",
 	"nvim-lua/lsp-status.nvim",
 	"nvim-lua/plenary.nvim",

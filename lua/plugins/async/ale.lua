@@ -12,6 +12,7 @@ vim.g.ale_linters = {
 	["css"] = { "stylelint" },
 	["javascript"] = { "eslint" },
 	["json"] = { "jsonlint" },
+	["lua"] = { "luacheck" },
 	["markdown"] = { "markdownlint" },
 	["scss"] = { "stylelint" },
 	["vim"] = { "vint" },
@@ -35,6 +36,7 @@ vim.g.ale_fixers = {
 	["bash"] = { "shfmt" },
 	["css"] = { "stylefmt" },
 	["dockerfile"] = { "dprint" },
+	["lua"] = { "stylua" },
 	["python"] = { "ruff", "ruff_format" },
 	["javascript"] = { "prettier-eslint" },
 	["json"] = { "prettier" },
@@ -47,5 +49,6 @@ vim.g.ale_warn_about_trailing_whitespace = 0
 vim.b.ale_javascript_prettier_options = "--prose-wrap always"
 vim.b.ale_python_pylint_options = "--load-plugins=pylint.extensions.docparams"
 vim.g.ale_set_highlights = 0
+vim.g.ale_lua_luacheck_options = "--globals vim"
 
 return function() end

@@ -1,8 +1,6 @@
 local plugins = {
 	"Afourcat/treesitter-terraform-doc.nvim",
-	"CopilotC-Nvim/CopilotChat.nvim",
 	"L3MON4D3/LuaSnip",
-	"christoomey/vim-tmux-navigator",
 	"hashivim/vim-terraform",
 	"haya14busa/vim-asterisk",
 	"hrsh7th/cmp-buffer",
@@ -20,13 +18,13 @@ local plugins = {
 	"onsails/lspkind.nvim",
 	"pangloss/vim-javascript",
 	"rafamadriz/friendly-snippets",
-	-- "roxma/vim-tmux-clipboard",
 	"ryanoasis/vim-devicons",
 	"saadparwaiz1/cmp_luasnip",
 	"takelley1/ansible-doc.vim",
 	"xolox/vim-misc",
 	-- Temp replacement for hrsh7th/nvim-cmp with cmp window above line for Copilot
 	{ "hrsh7th/cmp-nvim-lsp", dependencies = { "neovim/nvim-lspconfig" } },
+	{ "knubie/vim-kitty-navigator", build = "cp ./*.py ~/.config/kitty/" },
 	{ "folke/trouble.nvim", dependencies = { "nvim-tree/nvim-web-devicons" } },
 	{ "nvim-tree/nvim-tree.lua", dependencies = { "ryanoasis/vim-devicons" } },
 	{ "romgrk/barbar.nvim", dependencies = { "lewis6991/gitsigns.nvim", "nvim-tree/nvim-web-devicons" } },
@@ -60,6 +58,11 @@ local plugins_async = {
 		"zbirenbaum/copilot.lua",
 		event = { "BufReadPost" },
 		config = "copilot",
+	},
+	{
+		"CopilotC-Nvim/CopilotChat.nvim",
+		event = { "BufReadPost" },
+		config = "copilot_chat",
 	},
 	{
 		"folke/noice.nvim",

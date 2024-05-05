@@ -36,18 +36,24 @@ nnoremaps("cW", "ciW")
 -- Disable highlight when <leader><leader> is pressed
 noremaps("<leader><leader>", ":noh<cr>")
 
--- Tmux navigator - either switch Vim panes if present or switch tmux panes
-inoremaps("<C-h>", "<C-O>:TmuxNavigateLeft<cr>")
-inoremaps("<C-j>", "<C-O>:TmuxNavigateDown<cr>")
-inoremaps("<C-k>", "<C-O>:TmuxNavigateUp<cr>")
-inoremaps("<C-l>", "<C-O>:TmuxNavigateRight<cr>")
+-- Kitty navigator - either switch Vim panes if present or switch kitty windows
+for _, fn in pairs({ nnoremaps, inoremaps, snoremaps }) do
+	fn("<C-h>", ":KittyNavigateLeft<cr>")
+	fn("<C-j>", ":KittyNavigateDown<cr>")
+	fn("<C-k>", ":KittyNavigateUp<cr>")
+	fn("<C-l>", ":KittyNavigateRight<cr>")
+end
 
 -- Switch between buffers left and with <S-h> and <S-l>
-nnoremaps("S-h>", ":BufferPrevious<cr>")
-nnoremaps("S-l>", ":BufferNext<cr>")
+nnoremaps("<S-h>", ":BufferPrevious<cr>")
+nnoremaps("<S-l>", ":BufferNext<cr>")
 
 -- Jump to beginning of line with 0
 noremaps("0", "^")
+
+-- Splits
+nnoremaps("-", ":split<cr>")
+nnoremaps("|", ":vsplit<cr>")
 
 -- Telescope
 nnoremaps("<C-p>", function()
@@ -86,7 +92,10 @@ nnoremaps("<leader>q", vim.diagnostic.setloclist)
 local function ask_copilot(target)
 	local copilot = require("CopilotChat")
 	return function()
-		return copilot.ask(vim.fn.input("Ask " .. target), { selection = require("CopilotChat.select")[target] })
+		return copilot.ask(
+			vim.fn.input("Ask " .. target .. ": "),
+			{ selection = require("CopilotChat.select")[target] }
+		)
 	end
 end
 
@@ -138,4 +147,12 @@ nnoremaps("q:", "<nop>")
 nnoremaps("Q", "<nop>")
 nnoremaps("q", "<nop>")
 nnoremaps("<leader>q", "<esc>:TroubleClose<cr>:qa<cr>")
-nnoremaps("<leader>z", "<esc>:TroubleClose<cr>:bd<cr>")
+
+nnoremaps("<leader>z", function()
+	vim.cmd("TroubleClose")
+	if #vim.api.nvim_list_wins() > 1 then
+		vim.cmd("close")
+	else
+		vim.cmd("bdelete")
+	end
+end)

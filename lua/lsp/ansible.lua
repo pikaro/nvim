@@ -2,7 +2,7 @@ local lspconfig = require("lspconfig")
 
 return {
 	lsp = lspconfig.ansiblels,
-	filetypes = { "yaml", "yaml.ansible", "ansible" },
+	filetypes = { "yaml.ansible", "ansible" },
 	settings = {
 		ansible = {
 			ansible = {

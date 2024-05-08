@@ -70,6 +70,12 @@ for _, fn in pairs({ nnoremaps, inoremaps, snoremaps }) do
 	fn("<S-Tab", "<Plug>(doge-jump-backward)")
 end
 
+-- Treesitter
+nnoremaps("<leader>I", function()
+	local data = require("functions.show_pos")()
+	require("functions.pretty_scratch")(data)
+end)
+
 -- Don't jump with *
 noremaps("*", "<Plug>(asterisk-z*)")
 noremaps("#", "<Plug>(asterisk-z#)")

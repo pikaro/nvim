@@ -26,7 +26,6 @@ local plugins = {
 	{ "hrsh7th/cmp-nvim-lsp", dependencies = { "neovim/nvim-lspconfig" } },
 	{ "knubie/vim-kitty-navigator", build = "cp ./*.py ~/.config/kitty/" },
 	{ "folke/trouble.nvim", dependencies = { "nvim-tree/nvim-web-devicons" } },
-	{ "nvim-tree/nvim-tree.lua", dependencies = { "ryanoasis/vim-devicons" } },
 	{ "romgrk/barbar.nvim", dependencies = { "lewis6991/gitsigns.nvim", "nvim-tree/nvim-web-devicons" } },
 	{ "tzachar/cmp-ai", dependencies = "nvim-lua/plenary.nvim" },
 	{
@@ -71,17 +70,6 @@ local plugins_async = {
 		config = "noice",
 	},
 	{
-		"kylechui/nvim-surround",
-		event = { "VeryLazy" },
-		config = "surround",
-	},
-	{
-		"XXiaoA/ns-textobject.nvim",
-		dependencies = { "kylechui/nvim-surround" },
-		event = { "InsertEnter" },
-		config = "textobject",
-	},
-	{
 		"windwp/nvim-autopairs",
 		event = { "InsertEnter" },
 		config = "autopairs",
@@ -115,6 +103,18 @@ local plugins_async = {
 		event = "BufReadPost",
 		config = "indent_blankline",
 		after = { "https://gitlab.com/HiPhish/rainbow-delimiters.nvim" },
+	},
+	{
+		"nvim-tree/nvim-tree.lua",
+		dependencies = { "ryanoasis/vim-devicons" },
+		event = { "BufReadPost" },
+		config = "tree",
+	},
+	{
+		"nvim-treesitter/nvim-treesitter-textobjects",
+		dependencies = { "nvim-treesitter/nvim-treesitter" },
+		event = { "BufReadPost" },
+		config = "treesitter_textobjects",
 	},
 }
 

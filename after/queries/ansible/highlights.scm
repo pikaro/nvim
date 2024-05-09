@@ -119,9 +119,8 @@
 )
 
 (
-    [
-        (double_quote_scalar)
-        (single_quote_scalar)
-    ] @variable.ansible
-    (#lua-match? @variable.ansible "\{\{(.*)}}")
+    (double_quote_scalar) @variable.ansible
+    (#lua-match? @variable.ansible "{{ ?(.*) ?}}")
+    (#vim-match-offset! @variable.ansible "\\{\\{ ?\\zs.*\\ze ?\\}\\}" "m")
+    (#set! "priority" 999)
  )

@@ -47,6 +47,9 @@ require("nvim-treesitter.configs").setup({
 	},
 })
 
+local query = require("vim.treesitter.query")
+query.add_directive("vim-match-offset!", require("treesitter.directives.vim_match_offset"), { all = true })
+
 local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
 parser_config.jinja = {
 	install_info = {
@@ -70,10 +73,10 @@ local function read_file(path)
 end
 
 local function get_predefined(parser, kind)
-	local query = "queries/" .. parser .. "/" .. kind .. ".scm"
-	local predefined_path = vim.fn.stdpath("data") .. "/lazy/nvim-treesitter/" .. query
-	local custom_path = vim.fn.stdpath("config") .. "/" .. query
-	local after_path = vim.fn.stdpath("config") .. "/after/" .. query
+	local query_path = "queries/" .. parser .. "/" .. kind .. ".scm"
+	local predefined_path = vim.fn.stdpath("data") .. "/lazy/nvim-treesitter/" .. query_path
+	local custom_path = vim.fn.stdpath("config") .. "/" .. query_path
+	local after_path = vim.fn.stdpath("config") .. "/after/" .. query_path
 	local parser_queries = read_file(custom_path) or read_file(predefined_path)
 	parser_queries = parser_queries .. "\n" .. (read_file(after_path) or "")
 	return parser_queries
@@ -98,7 +101,7 @@ local function extend_queries(parser, language)
 		local predefined = get_predefined(parser, kind) or ""
 		local extended = get_extended(language, kind)
 		if extended then
-			require("vim.treesitter.query").set(parser, kind, predefined .. "\n" .. extended)
+			query.set(parser, kind, predefined .. "\n" .. extended)
 		end
 	end
 end

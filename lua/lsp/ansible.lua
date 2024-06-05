@@ -9,9 +9,12 @@ return {
 				path = "ansible",
 				useFullyQualifiedCollectionNames = true,
 			},
-			ansibleLint = {
-				enabled = true,
-				path = "ansible-lint",
+			validation = {
+				lint = {
+					enabled = true,
+					path = "ansible-lint",
+					arguments = { "--config", "~/.config/ansible-lint.yml" },
+				},
 			},
 			executionEnvironment = {
 				enabled = false,

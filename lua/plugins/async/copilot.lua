@@ -17,6 +17,7 @@ return function()
 			env = false,
 			confini = false,
 			ini = false,
+			arduino = true,
 			["."] = false,
 		},
 	})

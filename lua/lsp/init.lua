@@ -13,6 +13,7 @@ local default_config = {
 
 local languages = {
 	"ansible",
+	"arduino",
 	"javascript",
 	"php",
 	"python",
@@ -29,9 +30,11 @@ for _, language in ipairs(languages) do
 	local config = ft_config(language)
 	if config then
 		local lsp = config.lsp
+		local cmd = config.cmd
 		local diagnostics = vim.tbl_extend("force", default_config, config.diagnostics or {})
 		local filetypes = config.filetypes or { language }
 		local settings = config.settings or {}
+		capabilities = vim.tbl_extend("keep", capabilities, config.capabilities or {})
 		local on_attach = config.on_attach
 				and function(client, bufnr)
 					config.on_attach(client, bufnr)
@@ -40,9 +43,11 @@ for _, language in ipairs(languages) do
 			or lsp_status.on_attach
 		vim.diagnostic.config(diagnostics)
 		local options = {
+			cmd = cmd,
 			on_attach = on_attach,
 			filetypes = filetypes,
 			capabilities = capabilities,
+			root_dir = config.root_dir,
 			settings = settings,
 		}
 		lsp.setup(vim.tbl_extend("force", options, config.options or {}))
@@ -55,4 +60,4 @@ for type, icon in pairs(signs) do
 	vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
 end
 
-vim.lsp.set_log_level("off")
+vim.lsp.set_log_level("trace")

@@ -25,7 +25,6 @@ local plugins = {
 	-- Temp replacement for hrsh7th/nvim-cmp with cmp window above line for Copilot
 	{ "hrsh7th/cmp-nvim-lsp", dependencies = { "neovim/nvim-lspconfig" } },
 	{ "knubie/vim-kitty-navigator", build = "cp ./*.py ~/.config/kitty/" },
-	{ "folke/trouble.nvim", dependencies = { "nvim-tree/nvim-web-devicons" } },
 	{ "romgrk/barbar.nvim", dependencies = { "lewis6991/gitsigns.nvim", "nvim-tree/nvim-web-devicons" } },
 	{ "tzachar/cmp-ai", dependencies = "nvim-lua/plenary.nvim" },
 	{
@@ -116,6 +115,17 @@ local plugins_async = {
 		event = { "BufReadPost" },
 		config = "treesitter_textobjects",
 	},
+	{
+		"folke/trouble.nvim",
+		dependencies = { "nvim-tree/nvim-web-devicons" },
+		cmd = "Trouble",
+		config = "trouble",
+	},
+	-- {
+	-- 	"stevearc/vim-arduino",
+	-- 	event = { "BufReadPost" },
+	-- 	config = "arduino",
+	-- },
 }
 
 for _, v in ipairs(plugins_async) do

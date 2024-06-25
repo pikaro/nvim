@@ -8,18 +8,19 @@ local function get_hl(group)
 	return hl
 end
 
-local function set_hl(group, opts)
+local function set_hl(group, opts, clear)
 	local hl = get_hl(group)
-	-- Dump the current highlight group to file
-	local f = io.open("/tmp/hl" .. group .. ".txt", "w")
-	f:write(vim.inspect(hl))
+
+	if clear then
+		for key, _ in pairs(hl) do
+			hl[key] = nil
+		end
+	end
 
 	for key, value in pairs(opts) do
 		hl[key] = value
 	end
 
-	f:write(vim.inspect(hl))
-	f:close()
 	vim.api.nvim_set_hl(0, group, hl)
 end
 

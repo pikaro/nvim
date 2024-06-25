@@ -87,7 +87,7 @@ nnoremaps("<C-t>", ":NvimTreeToggle<CR>")
 
 -- LSP
 nnoremaps("<leader>t", function()
-	require("trouble").toggle("workspace_diagnostics")
+	require("trouble").toggle("diagnostics")
 end)
 nnoremaps("<leader>e", vim.diagnostic.open_float)
 nnoremaps("<leader>D", vim.diagnostic.goto_prev)
@@ -152,10 +152,10 @@ vim.api.nvim_create_autocmd("LspAttach", {
 nnoremaps("q:", "<nop>")
 nnoremaps("Q", "<nop>")
 nnoremaps("q", "<nop>")
-nnoremaps("<leader>q", "<esc>:TroubleClose<cr>:qa<cr>")
+nnoremaps("<leader>q", "<esc>:Trouble diagnostics close<cr>:qa<cr>")
 
 nnoremaps("<leader>z", function()
-	vim.cmd("TroubleClose")
+	vim.cmd("Trouble diagnostics close")
 	if #vim.api.nvim_list_wins() > 1 then
 		vim.cmd("close")
 	else

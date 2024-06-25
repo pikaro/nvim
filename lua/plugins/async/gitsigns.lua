@@ -1,12 +1,12 @@
 return function()
 	require("gitsigns").setup({
 		signs = {
-			add = { hl = "GitGutterAdd", text = "+" },
-			change = { hl = "GitGutterChange", text = "~" },
-			delete = { hl = "GitGutterDelete", text = "-" },
-			topdelete = { hl = "GitGutterDelete", text = "‾" },
-			changedelete = { hl = "GitGutterChange", text = "~" },
-			untracked = { hl = "GitGutterAdd", text = "┆" },
+			add = { text = "+" },
+			change = { text = "~" },
+			delete = { text = "-" },
+			topdelete = { text = "‾" },
+			changedelete = { text = "~" },
+			untracked = { text = "┆" },
 		},
 		numhl = true,
 		current_line_blame = true,

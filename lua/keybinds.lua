@@ -1,43 +1,23 @@
-local map = vim.keymap.set
-
-local nnoremaps = function(lhs, rhs, opts)
-	map("n", lhs, rhs, vim.tbl_extend("force", { noremap = true, silent = true }, opts or {}))
-end
-
-local inoremaps = function(lhs, rhs, opts)
-	map("i", lhs, rhs, vim.tbl_extend("force", { noremap = true, silent = true }, opts or {}))
-end
-
-local snoremaps = function(lhs, rhs, opts)
-	map("s", lhs, rhs, vim.tbl_extend("force", { noremap = true, silent = true }, opts or {}))
-end
-
-local vnoremaps = function(lhs, rhs, opts)
-	map("v", lhs, rhs, vim.tbl_extend("force", { noremap = true, silent = true }, opts or {}))
-end
-
-local noremaps = function(lhs, rhs, opts)
-	map("", lhs, rhs, vim.tbl_extend("force", { noremap = true, silent = true }, opts or {}))
-end
+local map = require("functions/map")
 
 -- Jump to last in stack
-nnoremaps("<leader>o", "<C-o>")
+map.nnoremaps("<leader>o", "<C-o>")
 
 -- Write all buffers
-nnoremaps("<leader>w", ":wa<cr>")
+map.nnoremaps("<leader>w", ":wa<cr>")
 
 -- Fold and unfold
-nnoremaps("<space>", "za")
+map.nnoremaps("<space>", "za")
 
 -- Always change inner words instead of up to the end
-nnoremaps("cw", "ciw")
-nnoremaps("cW", "ciW")
+map.nnoremaps("cw", "ciw")
+map.nnoremaps("cW", "ciW")
 
 -- Disable highlight when <leader><leader> is pressed
-noremaps("<leader><leader>", ":noh<cr>")
+map.noremaps("<leader><leader>", ":noh<cr>")
 
 -- Kitty navigator - either switch Vim panes if present or switch kitty windows
-for _, fn in pairs({ nnoremaps, inoremaps, snoremaps }) do
+for _, fn in pairs({ map.nnoremaps, map.inoremaps, map.snoremaps }) do
 	fn("<C-h>", ":KittyNavigateLeft<cr>")
 	fn("<C-j>", ":KittyNavigateDown<cr>")
 	fn("<C-k>", ":KittyNavigateUp<cr>")
@@ -45,54 +25,54 @@ for _, fn in pairs({ nnoremaps, inoremaps, snoremaps }) do
 end
 
 -- Switch between buffers left and with <S-h> and <S-l>
-nnoremaps("<S-h>", ":BufferPrevious<cr>")
-nnoremaps("<S-l>", ":BufferNext<cr>")
+map.nnoremaps("<S-h>", ":BufferPrevious<cr>")
+map.nnoremaps("<S-l>", ":BufferNext<cr>")
 
 -- Jump to beginning of line with 0
-noremaps("0", "^")
+map.noremaps("0", "^")
 
 -- Splits
-nnoremaps("-", ":split<cr>")
-nnoremaps("|", ":vsplit<cr>")
+map.nnoremaps("-", ":split<cr>")
+map.nnoremaps("|", ":vsplit<cr>")
 
 -- Telescope
-nnoremaps("<C-p>", function()
+map.nnoremaps("<C-p>", function()
 	require("telescope.builtin").find_files()
 end)
-nnoremaps("<C-o>", function()
+map.nnoremaps("<C-o>", function()
 	require("telescope.builtin").live_grep()
 end)
 
 -- Doge
-nnoremaps("<leader>b", "<Plug>(doge-generate)")
-for _, fn in pairs({ nnoremaps, inoremaps, snoremaps }) do
+map.nnoremaps("<leader>b", "<Plug>(doge-generate)")
+for _, fn in pairs({ map.nnoremaps, map.inoremaps, map.snoremaps }) do
 	fn("<Tab", "<Plug>(doge-jump-forward)")
 	fn("<S-Tab", "<Plug>(doge-jump-backward)")
 end
 
 -- Treesitter
-nnoremaps("<leader>I", function()
+map.nnoremaps("<leader>I", function()
 	local data = require("functions.show_pos")()
 	require("functions.pretty_scratch")(data)
 end)
 
 -- Don't jump with *
-noremaps("*", "<Plug>(asterisk-z*)")
-noremaps("#", "<Plug>(asterisk-z#)")
-noremaps("g*", "<Plug>(asterisk-gz*)")
-noremaps("g#", "<Plug>(asterisk-gz#)")
+map.noremaps("*", "<Plug>(asterisk-z*)")
+map.noremaps("#", "<Plug>(asterisk-z#)")
+map.noremaps("g*", "<Plug>(asterisk-gz*)")
+map.noremaps("g#", "<Plug>(asterisk-gz#)")
 
 -- nvim-tree
-nnoremaps("<C-t>", ":NvimTreeToggle<CR>")
+map.nnoremaps("<C-t>", ":NvimTreeToggle<CR>")
 
 -- LSP
-nnoremaps("<leader>t", function()
-	require("trouble").toggle("workspace_diagnostics")
+map.nnoremaps("<leader>t", function()
+	require("trouble").toggle("diagnostics")
 end)
-nnoremaps("<leader>e", vim.diagnostic.open_float)
-nnoremaps("<leader>D", vim.diagnostic.goto_prev)
-nnoremaps("<leader>d", vim.diagnostic.goto_next)
-nnoremaps("<leader>q", vim.diagnostic.setloclist)
+map.nnoremaps("<leader>e", vim.diagnostic.open_float)
+map.nnoremaps("<leader>D", vim.diagnostic.goto_prev)
+map.nnoremaps("<leader>d", vim.diagnostic.goto_next)
+map.nnoremaps("<leader>q", vim.diagnostic.setloclist)
 
 -- Copilot
 local function ask_copilot(target)
@@ -105,19 +85,21 @@ local function ask_copilot(target)
 	end
 end
 
-nnoremaps("<leader>c", ask_copilot("buffer"))
-vnoremaps("<leader>c", ask_copilot("visual"))
+map.nnoremaps("<leader>c", ask_copilot("buffer"))
+map.vnoremaps("<leader>c", ask_copilot("visual"))
+
+-- LSP
 
 local lsp_augroup = vim.api.nvim_create_augroup("UserLspConfig", {})
 local function lsb_bind(event)
 	vim.bo[event.buf].omnifunc = "v:lua.vim.lsp.omnifunc"
 
 	local opts = { buffer = event.buf }
-	nnoremaps("<leader>G", vim.lsp.buf.declaration, opts)
-	nnoremaps("<leader>g", vim.lsp.buf.definition, opts)
-	nnoremaps("<leader>r", vim.lsp.buf.references, opts)
-	nnoremaps("<leader>i", vim.lsp.buf.implementation, opts)
-	nnoremaps("K", vim.lsp.buf.hover, opts)
+	map.nnoremaps("<leader>G", vim.lsp.buf.declaration, opts)
+	map.nnoremaps("<leader>g", vim.lsp.buf.definition, opts)
+	map.nnoremaps("<leader>r", vim.lsp.buf.references, opts)
+	map.nnoremaps("<leader>i", vim.lsp.buf.implementation, opts)
+	map.nnoremaps("K", vim.lsp.buf.hover, opts)
 
 	local ft = vim.bo[event.buf].filetype
 
@@ -128,7 +110,7 @@ local function lsb_bind(event)
 	}
 	local sig_help = sig_helps[ft] or vim.lsp.buf.signature_help
 
-	nnoremaps("<leader>s", sig_help, opts)
+	map.nnoremaps("<leader>s", sig_help, opts)
 
 	-- vim.keymap.set('n', '<space>wa', vim.lsp.buf.add_workspace_folder, opts)
 	-- vim.keymap.set('n', '<space>wr', vim.lsp.buf.remove_workspace_folder, opts)
@@ -148,17 +130,98 @@ vim.api.nvim_create_autocmd("LspAttach", {
 	callback = lsb_bind,
 })
 
--- Overrides
-nnoremaps("q:", "<nop>")
-nnoremaps("Q", "<nop>")
-nnoremaps("q", "<nop>")
-nnoremaps("<leader>q", "<esc>:TroubleClose<cr>:qa<cr>")
+-- Filetype specific keybinds
 
-nnoremaps("<leader>z", function()
-	vim.cmd("TroubleClose")
-	if #vim.api.nvim_list_wins() > 1 then
-		vim.cmd("close")
-	else
-		vim.cmd("bdelete")
+local ft_augroup = vim.api.nvim_create_augroup("UserFileTypeConfig", {})
+
+local ft_maps = {
+	-- Obsolete, leave in as example
+	-- ["arduino"] = {
+	-- 	["<leader>au"] = { { map.nnoremaps }, ":ArduinoUpload<cr>" },
+	-- 	["<leader>av"] = { { map.nnoremaps }, ":ArduinoVerify<cr>" },
+	-- 	["<leader>aa"] = { { map.nnoremaps }, ":ArduinoUploadAndSerial<cr>" },
+	-- 	["<leader>as"] = { { map.nnoremaps }, ":ArduinoSerial<cr>" },
+	-- },
+}
+
+for ft, maps in pairs(ft_maps) do
+	local ft_bind = function(event)
+		for key, args in pairs(maps) do
+			local fns = args[1]
+			local cmd = args[2]
+			for _, fn in ipairs(fns) do
+				fn(key, cmd, { buffer = event.buf })
+			end
+		end
 	end
+
+	vim.api.nvim_create_autocmd("FileType", {
+		group = ft_augroup,
+		pattern = ft,
+		callback = ft_bind,
+	})
+end
+
+-- Overrides
+
+local function switch_and_delete()
+	local current_buf = vim.api.nvim_get_current_buf()
+	local alt_buf = vim.fn.bufnr("#")
+	local target_buf = alt_buf
+
+	if alt_buf == -1 then
+		-- Get the previous buffer in the buffer list
+		local bufs = vim.api.nvim_list_bufs()
+		for _, buf in ipairs(bufs) do
+			if buf ~= current_buf and vim.api.nvim_buf_is_loaded(buf) then
+				target_buf = buf
+				break
+			end
+		end
+	end
+
+	-- Iterate over all windows and set the buffer
+	local wins = vim.api.nvim_list_wins()
+	for _, win in ipairs(wins) do
+		local win_buf = vim.api.nvim_win_get_buf(win)
+		if win_buf == current_buf then
+			if target_buf ~= -1 then
+				vim.api.nvim_win_set_buf(win, target_buf)
+			else
+				vim.cmd("BufferPrevious")
+			end
+		end
+	end
+
+	-- Finally, delete the current buffer
+	vim.api.nvim_buf_delete(current_buf, {})
+end
+
+local function close_all_but_current()
+	local current_buf = vim.api.nvim_get_current_buf()
+	local bufs = vim.api.nvim_list_bufs()
+
+	for _, buf in ipairs(bufs) do
+		if buf ~= current_buf then
+			vim.api.nvim_buf_delete(buf, {})
+		end
+	end
+end
+
+map.nnoremaps("q:", "<nop>")
+map.nnoremaps("Q", "<nop>")
+map.nnoremaps("q", "<nop>")
+map.nnoremaps("<leader>q", "<esc>:Trouble diagnostics close<cr>:qa<cr>")
+
+map.nnoremaps("<leader>z", function()
+	vim.cmd("Trouble diagnostics close")
+	switch_and_delete()
+end)
+
+map.nnoremaps("<leader>Z", function()
+	close_all_but_current()
+end)
+
+map.nnoremaps("<leader>x", function()
+	vim.cmd("close")
 end)

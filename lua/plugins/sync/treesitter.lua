@@ -1,7 +1,9 @@
 require("nvim-treesitter.configs").setup({
 	ensure_installed = {
+		"arduino",
 		"bash",
 		"c",
+		"cpp",
 		"dockerfile",
 		"go",
 		"hcl",
@@ -14,6 +16,7 @@ require("nvim-treesitter.configs").setup({
 		"python",
 		"query",
 		"regex",
+		"scheme",
 		"terraform",
 		"vim",
 		"vimdoc",
@@ -36,9 +39,9 @@ require("nvim-treesitter.configs").setup({
 		enable = true,
 		keymaps = {
 			init_selection = "<cr>",
-			node_incremental = "grn",
-			scope_incremental = "grc",
-			node_decremental = "grm",
+			node_incremental = "<cr>",
+			scope_incremental = "gc",
+			node_decremental = "gm",
 		},
 	},
 
@@ -50,7 +53,8 @@ require("nvim-treesitter.configs").setup({
 local query = require("vim.treesitter.query")
 query.add_directive("vim-match-offset!", require("treesitter.directives.vim_match_offset"), { all = true })
 
-local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
+local parsers = require("nvim-treesitter.parsers")
+local parser_config = parsers.get_parser_configs()
 parser_config.jinja = {
 	install_info = {
 		url = "https://github.com/dbt-labs/tree-sitter-jinja2",

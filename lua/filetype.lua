@@ -1,9 +1,38 @@
 local fts = {
+	[".env"] = "env",
+
 	["*.tfvars"] = "terraform-vars",
 	["*.tftpl"] = "terraform-tpl",
-	[".env"] = "env",
+
 	["*.yml.j2"] = "yaml.jinja",
+	["*.yaml.j2"] = "yaml.jinja",
 	["*.json.j2"] = "json.jinja",
+	["*.sh.j2"] = "bash.jinja",
+	["*.toml.j2"] = "toml.jinja",
+
+	[".env.tpl"] = "env",
+	["*.yml.tpl.j2"] = "yaml.jinja",
+	["*.yaml.tpl.j2"] = "yaml.jinja",
+	["*.json.tpl.j2"] = "json.jinja",
+	["*.toml.tpl.j2"] = "toml.jinja",
+
+	["*.yml.tpl"] = "yaml",
+	["*.yaml.tpl"] = "yaml",
+	["*.json.tpl"] = "json",
+	["*.toml.tpl"] = "toml",
+
+	-- Obsolete, leaving for reference
+	-- ["*.h"] = function()
+	--	local files = vim.fn.glob(vim.fn.expand("%:p:h") .. "/*.ino", false, true)
+	--	if #files > 0 then
+	--		return "arduino"
+	--	end
+	--	files = vim.fn.glob(vim.fn.expand("%:p:h") .. "/*.cpp", false, true)
+	--	if #files > 0 then
+	--		return "cpp"
+	--	end
+	--	return "c"
+	--end,
 }
 
 local ft_options = {
@@ -31,16 +60,32 @@ local ft_options = {
 		softtabstop = 2,
 		colorcolumn = "100",
 	},
+	["terraform"] = {
+		shiftwidth = 2,
+		tabstop = 2,
+		softtabstop = 2,
+		colorcolumn = "100",
+	},
+	["terraform-vars"] = {
+		shiftwidth = 2,
+		tabstop = 2,
+		softtabstop = 2,
+		colorcolumn = "100",
+	},
 }
 
 local ft_augroup = vim.api.nvim_create_augroup("filetype", { clear = true })
 
 for pattern, filetype in pairs(fts) do
-	vim.api.nvim_create_autocmd({ "BufNewFile", "BufRead" }, {
+	vim.api.nvim_create_autocmd({ "BufNewFile", "BufReadPre", "BufRead" }, {
 		group = ft_augroup,
 		pattern = pattern,
 		callback = function()
-			vim.opt_local.filetype = filetype
+			if type(filetype) == "function" then
+				vim.bo.filetype = filetype()
+			else
+				vim.bo.filetype = filetype
+			end
 		end,
 	})
 end

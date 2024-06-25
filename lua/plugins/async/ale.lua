@@ -16,11 +16,14 @@ vim.g.ale_linters = {
 	["markdown"] = { "markdownlint" },
 	["scss"] = { "stylelint" },
 	["vim"] = { "vint" },
+	-- Handled by LSP
+	["c"] = {},
+	["cpp"] = {},
 	["yaml"] = {},
 	["bash"] = {},
-	["ansible"] = {},
-	["python"] = { "ruff" },
 	["terraform"] = {},
+	["ansible"] = {},
+	["python"] = {},
 }
 
 -- Previously used, now covered by LSP
@@ -34,8 +37,11 @@ vim.g.ale_linters = {
 -- No YAML fixers work with Gitlab CI :(
 vim.g.ale_fixers = {
 	["bash"] = { "shfmt" },
+	["c"] = { "clangtidy", "clang-format" },
+	["cpp"] = { "clangtidy", "clang-format" },
 	["css"] = { "stylefmt" },
 	["dockerfile"] = { "dprint" },
+	["go"] = { "gofumpt" },
 	["lua"] = { "stylua" },
 	["python"] = { "ruff", "ruff_format" },
 	["javascript"] = { "prettier-eslint" },
@@ -44,6 +50,16 @@ vim.g.ale_fixers = {
 	["scss"] = { "stylefmt" },
 }
 
+local clang_all = function(var, value)
+	vim.g["ale_c_" .. var] = value
+	vim.g["ale_cpp_" .. var] = value
+end
+
+clang_all("clangformat_style_option", "file:" .. vim.fn.expand("~/.config/clang-format.yml"))
+clang_all("clangtidy_extra_options", "--fix-notes --config-file=" .. vim.fn.expand("~/.config/clang-tidy.yml"))
+clang_all("clangtidy_fix_errors", 1)
+
+-- call ale#Set('c_clangformat_options', '--style=file:~/.config/clang-format') from Lua
 vim.g.ale_echo_cursor = 0
 vim.g.ale_warn_about_trailing_whitespace = 0
 vim.b.ale_javascript_prettier_options = "--prose-wrap always"

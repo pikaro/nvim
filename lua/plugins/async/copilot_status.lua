@@ -5,8 +5,10 @@ return function()
 			vim.g.copilot_status = "🥽"
 		elseif data.status == "InProgress" then
 			vim.g.copilot_status = "⏳"
+        elseif data.status == "Warning" then
+            vim.g.copilot_status = "❗"
 		else
-			vim.g.copilot_status = data.status or "❌"
+			vim.g.copilot_status = "❌"
 		end
 	end)
 end

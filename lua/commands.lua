@@ -42,3 +42,5 @@ end)
 cmd("Q", cmdproxy({ "quitall" }), { bang = true })
 cmd("Wq", cmdproxy({ "write", "quit" }), { bang = true })
 cmd("WQ", cmdproxy({ "write", "quit" }), { bang = true })
+
+_G.print_to_buffer = require("functions/print_to_buffer")

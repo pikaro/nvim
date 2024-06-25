@@ -9,6 +9,10 @@ local function aucmd(event, pattern, callback)
 end
 
 aucmd({ "BufEnter", "FocusGained", "InsertLeave" }, "*", function()
+	local array_has = require("functions.array_has")
+	if array_has({ "NvimTree" }, vim.bo.filetype) then
+		return
+	end
 	vim.o.relativenumber = true
 end)
 aucmd({ "BufLeave", "FocusLost", "InsertEnter" }, "*", function()

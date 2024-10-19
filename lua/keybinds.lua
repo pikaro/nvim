@@ -4,7 +4,18 @@ local map = require("functions/map")
 map.nnoremaps("<leader>o", "<C-o>")
 
 -- Write all buffers
-map.nnoremaps("<leader>w", ":wa<cr>")
+-- TODO: This makes all the modified buffers pop up quickly, how to fix?
+map.nnoremaps("<leader>w", function()
+	for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+		local listed = vim.bo[buf].buflisted
+		local modifiable = vim.bo[buf].modifiable
+		local modified = vim.bo[buf].modified
+		if listed and modifiable and modified then
+			vim.api.nvim_exec_autocmds("BufWritePre", { buffer = buf })
+		end
+	end
+	vim.cmd("wa")
+end)
 
 -- Fold and unfold
 map.nnoremaps("<space>", "za")
@@ -148,6 +159,19 @@ end
 vim.api.nvim_create_autocmd("LspAttach", {
 	group = lsp_augroup,
 	callback = lsb_bind,
+})
+
+vim.api.nvim_create_autocmd("BufWritePre", {
+	group = lsp_augroup,
+	callback = function()
+		local clients = vim.lsp.get_clients({ bufnr = 0 })
+		for _, client in ipairs(clients) do
+			if client and client.supports_method("textDocument/formatting") then
+				vim.lsp.buf.format()
+				return
+			end
+		end
+	end,
 })
 
 -- Filetype specific keybinds

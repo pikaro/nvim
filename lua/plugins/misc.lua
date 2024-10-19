@@ -7,3 +7,10 @@ vim.g.terraform_fmt_on_save = 1
 
 -- Set manually
 vim.g.kitty_navigator_no_mappings = 1
+
+-- Markdown
+vim.g.markdown_fenced_languages = {
+	"shell=bash",
+	"js=javascript",
+	"ts=typescript",
+}

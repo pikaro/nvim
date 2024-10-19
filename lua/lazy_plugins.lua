@@ -8,7 +8,6 @@ local plugins = {
 	-- "lepture/vim-jinja",
 	"mfussenegger/nvim-ansible",
 	"neovim/nvim-lspconfig",
-	"nvim-lua/lsp-status.nvim",
 	"nvim-lua/plenary.nvim",
 	"nvim-tree/nvim-web-devicons",
 	"nvim-treesitter/nvim-treesitter-context",
@@ -20,6 +19,7 @@ local plugins = {
 	"takelley1/ansible-doc.vim",
 	"xolox/vim-misc",
 	"aklt/plantuml-syntax",
+	"creativenull/efmls-configs-nvim",
 	-- Temp replacement for hrsh7th/nvim-cmp with cmp window above line for Copilot
 	{ "hrsh7th/cmp-nvim-lsp", dependencies = { "neovim/nvim-lspconfig" } },
 	{ "knubie/vim-kitty-navigator", build = "cp ./*.py ~/.config/kitty/" },

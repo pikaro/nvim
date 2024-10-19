@@ -24,6 +24,7 @@ for _, language in ipairs(languages) do
 	if config then
 		local lsp = config.lsp
 		local cmd = config.cmd
+		local init_options = config.init_options
 		local diagnostics = vim.tbl_extend("force", default_config, config.diagnostics or {})
 		local filetypes = config.filetypes or { language }
 		local settings = config.settings or {}
@@ -37,6 +38,7 @@ for _, language in ipairs(languages) do
 		vim.diagnostic.config(diagnostics)
 		local options = {
 			cmd = cmd,
+			init_options = init_options,
 			on_attach = on_attach,
 			filetypes = filetypes,
 			capabilities = lsp_capabilities,

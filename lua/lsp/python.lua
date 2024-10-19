@@ -1,14 +1,14 @@
 local lspconfig = require("lspconfig")
 
 return {
-	lsp = lspconfig.basedpyright,
+	lsp = lspconfig.pyright,
 	options = {
 		single_file_support = true,
 	},
 	settings = {
 		pyright = {
 			disableLanguageServices = false,
-			disableOrganizeImports = false,
+			disableOrganizeImports = true,
 		},
 		python = {
 			workspaceSymbols = { enabled = true },

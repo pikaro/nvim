@@ -3,8 +3,7 @@ return function()
 		update_focused_file = {
 			enable = true,
 		},
-		disable_netrw = false,
-		hijack_netrw = true,
+		disable_netrw = true,
 		view = {
 			signcolumn = "no",
 		},

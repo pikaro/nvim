@@ -11,16 +11,7 @@ local default_config = {
 	underline = false,
 }
 
-local languages = {
-	"ansible",
-	"c",
-	"cpp",
-	"go",
-	"javascript",
-	"php",
-	"python",
-	"terraform",
-}
+local languages = require("functions.strippednames")(require("functions.basenames")(require("functions.ls")("lsp")))
 
 local lsp_status = require("lsp-status")
 lsp_status.register_progress()

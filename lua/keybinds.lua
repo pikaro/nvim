@@ -224,7 +224,8 @@ local function close_all_but_current()
 	for _, buf in ipairs(bufs) do
 		local listed = vim.api.nvim_buf_get_option(buf, "buflisted")
 		local modifiable = vim.api.nvim_buf_get_option(buf, "modifiable")
-		if buf ~= current_buf and listed and modifiable then
+		local modified = vim.api.nvim_buf_get_option(buf, "modified")
+		if buf ~= current_buf and listed and modifiable and not modified then
 			vim.api.nvim_buf_delete(buf, {})
 		end
 	end

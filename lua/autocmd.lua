@@ -9,12 +9,15 @@ local function aucmd(event, pattern, callback)
 end
 
 aucmd({ "BufEnter", "FocusGained", "InsertLeave" }, "*", function()
-	local array_has = require("functions.array_has")
-	if array_has({ "NvimTree" }, vim.bo.filetype) then
+	local buf = vim.api.nvim_get_current_buf()
+	local listed = vim.api.nvim_buf_get_option(buf, "buflisted")
+	local modifiable = vim.api.nvim_buf_get_option(buf, "modifiable")
+	if not listed or not modifiable then
 		return
 	end
 	vim.o.relativenumber = true
 end)
+
 aucmd({ "BufLeave", "FocusLost", "InsertEnter" }, "*", function()
 	vim.o.relativenumber = false
 end)

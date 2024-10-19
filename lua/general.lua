@@ -25,6 +25,9 @@ o.scrolloff = 7
 --  Turn on the Wild menu
 o.wildmenu = true
 
+-- Open splits to the right
+o.splitright = true
+
 --  Ignore compiled files
 local separator = vim.fn.has("win32") and "\\" or "/"
 o.wildignore:append({

@@ -1,47 +1,47 @@
-local fts = {
-	[".env"] = "env",
-
-	["*.tfvars"] = "terraform-vars",
-	["*.tftpl"] = "terraform-tpl",
-
-	["*.yml.j2"] = "yaml.jinja",
-	["*.yaml.j2"] = "yaml.jinja",
-	["*.json.j2"] = "json.jinja",
-	["*.sh.j2"] = "bash.jinja",
-	["*.toml.j2"] = "toml.jinja",
-
-	[".env.tpl"] = "env",
-	["*.yml.tpl.j2"] = "yaml.jinja",
-	["*.yaml.tpl.j2"] = "yaml.jinja",
-	["*.json.tpl.j2"] = "json.jinja",
-	["*.toml.tpl.j2"] = "toml.jinja",
-
-	["*.yml.tpl"] = "yaml",
-	["*.yaml.tpl"] = "yaml",
-	["*.json.tpl"] = "json",
-	["*.toml.tpl"] = "toml",
-
-	-- Obsolete, leaving for reference
-	-- ["*.h"] = function()
-	--	local files = vim.fn.glob(vim.fn.expand("%:p:h") .. "/*.ino", false, true)
-	--	if #files > 0 then
-	--		return "arduino"
-	--	end
-	--	files = vim.fn.glob(vim.fn.expand("%:p:h") .. "/*.cpp", false, true)
-	--	if #files > 0 then
-	--		return "cpp"
-	--	end
-	--	return "c"
-	--end,
-}
+vim.filetype.add({
+	-- Note: Can use functions returning the type here as well
+	filename = {
+		[".env"] = "env",
+		["env"] = "env",
+	},
+	extension = {
+		["tfvars"] = "terraform-vars",
+		["tftpl"] = "terraform-tpl",
+		["puml"] = "plantuml",
+	},
+	pattern = {
+		["%.env%..*"] = "env",
+		["env%..*"] = "env",
+		[".*%.yml%.j2"] = "yaml.jinja",
+		[".*%.yaml%.j2"] = "yaml.jinja",
+		[".*%.ini%.j2"] = "ini.jinja",
+		[".*%.json%.j2"] = "json.jinja",
+		[".*%.rb%.j2"] = "ruby.jinja",
+		[".*%.sh%.j2"] = "bash.jinja",
+		[".*%.toml%.j2"] = "toml.jinja",
+		[".*%.yml%.tpl%.j2"] = "yaml.jinja",
+		[".*%.yaml%.tpl%.j2"] = "yaml.jinja",
+		[".*%.ini%.tpl%.j2"] = "ini.jinja",
+		[".*%.json%.tpl%.j2"] = "json.jinja",
+		[".*%.rb%.tpl%.j2"] = "ruby.jinja",
+		[".*%.toml%.tpl%.j2"] = "toml.jinja",
+		[".*%.xml%.tpl%.j2"] = "xml.jinja",
+		[".*%.yml%.tpl"] = "yaml",
+		[".*%.yaml%.tpl"] = "yaml",
+		[".*%.json%.tpl"] = "json",
+		[".*%.ini%.tpl"] = "ini",
+		[".*%.toml%.tpl"] = "toml",
+		[".*%.xml%.tpl"] = "xml",
+	},
+})
 
 local ft_options = {
 	["yaml"] = {
 		shiftwidth = 2,
 		tabstop = 2,
 		softtabstop = 2,
-		indentkeys = "-0#",
 		colorcolumn = "100",
+		indentkeys = "!^F,o,O,0#,0},0],0-",
 	},
 	["jinja"] = {
 		shiftwidth = 2,
@@ -74,22 +74,7 @@ local ft_options = {
 	},
 }
 
-local ft_augroup = vim.api.nvim_create_augroup("filetype", { clear = true })
-
-for pattern, filetype in pairs(fts) do
-	vim.api.nvim_create_autocmd({ "BufNewFile", "BufReadPre", "BufRead" }, {
-		group = ft_augroup,
-		pattern = pattern,
-		callback = function()
-			if type(filetype) == "function" then
-				vim.bo.filetype = filetype()
-			else
-				vim.bo.filetype = filetype
-			end
-		end,
-	})
-end
-
+local ft_augroup = vim.api.nvim_create_augroup("filetype_options", { clear = true })
 for filetype, _ in pairs(ft_options) do
 	vim.api.nvim_create_autocmd({ "FileType" }, {
 		group = ft_augroup,

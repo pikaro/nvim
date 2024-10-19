@@ -5,5 +5,8 @@ return function()
 		},
 		disable_netrw = false,
 		hijack_netrw = true,
+		view = {
+			signcolumn = "no",
+		},
 	})
 end

@@ -62,6 +62,10 @@ map.noremaps("#", "<Plug>(asterisk-z#)")
 map.noremaps("g*", "<Plug>(asterisk-gz*)")
 map.noremaps("g#", "<Plug>(asterisk-gz#)")
 
+-- Prevent {} from landing in jump list
+map.nnoremaps("{", "<Cmd>keepjumps normal! {<CR>")
+map.nnoremaps("}", "<Cmd>keepjumps normal! }<CR>")
+
 -- nvim-tree
 map.nnoremaps("<C-t>", ":NvimTreeToggle<CR>")
 
@@ -69,6 +73,7 @@ map.nnoremaps("<C-t>", ":NvimTreeToggle<CR>")
 map.nnoremaps("<leader>t", function()
 	require("trouble").toggle("diagnostics")
 end)
+map.nnoremaps("<leader>T", ":TodoTrouble toggle<cr>")
 map.nnoremaps("<leader>e", vim.diagnostic.open_float)
 map.nnoremaps("<leader>D", vim.diagnostic.goto_prev)
 map.nnoremaps("<leader>d", vim.diagnostic.goto_next)
@@ -87,6 +92,21 @@ end
 
 map.nnoremaps("<leader>c", ask_copilot("buffer"))
 map.vnoremaps("<leader>c", ask_copilot("visual"))
+map.nnoremaps("<leader>C", require("CopilotChat").toggle)
+
+-- Zen
+map.nnoremaps("<leader>f", function()
+	require("zen-mode").toggle({
+		window = {
+			width = 1, -- width will be 85% of the editor width
+		},
+	})
+end)
+
+-- WhichKey
+map.nnoremaps("<leader>?", function()
+	require("which-key").show({ global = false })
+end)
 
 -- LSP
 
@@ -202,7 +222,9 @@ local function close_all_but_current()
 	local bufs = vim.api.nvim_list_bufs()
 
 	for _, buf in ipairs(bufs) do
-		if buf ~= current_buf then
+		local listed = vim.api.nvim_buf_get_option(buf, "buflisted")
+		local modifiable = vim.api.nvim_buf_get_option(buf, "modifiable")
+		if buf ~= current_buf and listed and modifiable then
 			vim.api.nvim_buf_delete(buf, {})
 		end
 	end

@@ -27,3 +27,11 @@ if vim.fn.has("gui_running") then
 		vim.o.timeoutlen = 1000
 	end)
 end
+
+aucmd({ "BufWritePost" }, "*.puml", function()
+	local filepath = vim.fn.expand("%:p")
+	local outputpath = "/tmp/nvim-plantuml-output.png"
+	local configpath = vim.fn.expand("~/.config/nvim/include/plantuml.puml")
+	local command = string.format("cat %s %s | plantuml -darkmode -tpng -pipe > %s &", configpath, filepath, outputpath)
+	vim.fn.system(command)
+end)

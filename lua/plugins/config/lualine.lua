@@ -23,9 +23,11 @@ local function get_arduino_status()
 	-- return line
 end
 
-require("lualine").setup({
-	sections = {
-		lualine_a = { get_copilot_status, get_arduino_status, "mode" },
-		lualine_c = { "filename", lsp_status.status() },
-	},
-})
+return function()
+	require("lualine").setup({
+		sections = {
+			lualine_a = { get_copilot_status, get_arduino_status, "mode" },
+			lualine_c = { "filename", lsp_status.status() },
+		},
+	})
+end

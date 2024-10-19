@@ -1,55 +1,3 @@
-require("nvim-treesitter.configs").setup({
-	ensure_installed = {
-		"arduino",
-		"bash",
-		"c",
-		"cpp",
-		"dockerfile",
-		"go",
-		"hcl",
-		"hcl",
-		"javascript",
-		"json",
-		"lua",
-		"markdown",
-		"markdown_inline",
-		"python",
-		"query",
-		"regex",
-		"scheme",
-		"terraform",
-		"vim",
-		"vimdoc",
-		"yaml",
-	},
-
-	-- Install parsers synchronously
-	sync_install = false,
-	auto_install = true,
-	ignore_install = {},
-
-	highlight = {
-		enable = true,
-		disable = {},
-		-- Too slow
-		additional_vim_regex_highlighting = false,
-	},
-
-	incremental_selection = {
-		enable = true,
-		keymaps = {
-			init_selection = "<cr>",
-			node_incremental = "<cr>",
-			scope_incremental = "gc",
-			node_decremental = "gm",
-		},
-	},
-
-	indent = {
-		enable = true,
-	},
-})
-
 local query = require("vim.treesitter.query")
 query.add_directive("vim-match-offset!", require("treesitter.directives.vim_match_offset"), { all = true })
 
@@ -64,7 +12,17 @@ parser_config.jinja = {
 		requires_generate_from_grammar = true,
 	},
 }
+parser_config.plantuml = {
+	install_info = {
+		url = "https://github.com/lyndsysimon/tree-sitter-plantuml",
+		files = { "src/parser.c" },
+		branch = "main",
+		generate_requires_npm = true,
+		requires_generate_from_grammar = true,
+	},
+}
 vim.treesitter.language.register("jinja", "jinja")
+vim.treesitter.language.register("plantuml", "plantuml")
 
 local function read_file(path)
 	local file = io.open(path, "r")
@@ -103,9 +61,21 @@ local function extend_queries(parser, language)
 	local kinds = { "highlights", "injections" }
 	for _, kind in ipairs(kinds) do
 		local predefined = get_predefined(parser, kind) or ""
-		local extended = get_extended(language, kind)
-		if extended then
+		local extended = ""
+		local language_extended = get_extended(language, kind) or ""
+		local filetype_extended = get_extended(vim.bo.filetype, kind) or ""
+
+		if language_extended ~= "" then
+			extended = extended .. language_extended .. "\n"
+		end
+		if filetype_extended ~= "" then
+			extended = extended .. filetype_extended .. "\n"
+		end
+
+		if extended ~= "" then
 			query.set(parser, kind, predefined .. "\n" .. extended)
+		else
+			query.set(parser, kind, predefined)
 		end
 	end
 end
@@ -162,4 +132,58 @@ hl("@keyword.repeat.ansible.value", { link = "GruvboxFg1" })
 hl("@keyword.assignment.ansible.key", { fg = gruv.neutral_purple })
 hl("@keyword.assignment.ansible.value", { link = "GruvboxYellow" })
 
-hl("@variable.ansible", { link = "GruvboxYellow" })
+hl("@variable.jinja", { link = "GruvboxYellow" })
+
+return function()
+	require("nvim-treesitter.configs").setup({
+		ensure_installed = {
+			"arduino",
+			"bash",
+			"c",
+			"cpp",
+			"dockerfile",
+			"go",
+			"hcl",
+			"hcl",
+			"javascript",
+			"json",
+			"lua",
+			"markdown",
+			"markdown_inline",
+			"python",
+			"query",
+			"regex",
+			"scheme",
+			"terraform",
+			"vim",
+			"vimdoc",
+			"yaml",
+		},
+
+		-- Install parsers synchronously
+		sync_install = false,
+		auto_install = true,
+		ignore_install = {},
+
+		highlight = {
+			enable = true,
+			disable = {},
+			-- Too slow
+			additional_vim_regex_highlighting = false,
+		},
+
+		incremental_selection = {
+			enable = true,
+			keymaps = {
+				init_selection = "<cr>",
+				node_incremental = "<cr>",
+				scope_incremental = "gc",
+				node_decremental = "gm",
+			},
+		},
+
+		indent = {
+			enable = true,
+		},
+	})
+end

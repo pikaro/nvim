@@ -1,19 +1,16 @@
 local plugins = {
 	"Afourcat/treesitter-terraform-doc.nvim",
-	"L3MON4D3/LuaSnip",
-	"hashivim/vim-terraform",
 	"haya14busa/vim-asterisk",
 	"hrsh7th/cmp-buffer",
-	"huggingface/llm.nvim",
+	-- "huggingface/llm.nvim",
 	"jez/vim-superman",
-	"lepture/vim-jinja",
+	-- "lepture/vim-jinja",
 	"mfussenegger/nvim-ansible",
 	"ellisonleao/gruvbox.nvim",
 	"neovim/nvim-lspconfig",
 	"nvim-lua/lsp-status.nvim",
 	"nvim-lua/plenary.nvim",
 	"nvim-tree/nvim-web-devicons",
-	"nvim-treesitter/nvim-treesitter",
 	"nvim-treesitter/nvim-treesitter-context",
 	"onsails/lspkind.nvim",
 	"pangloss/vim-javascript",
@@ -22,130 +19,129 @@ local plugins = {
 	"saadparwaiz1/cmp_luasnip",
 	"takelley1/ansible-doc.vim",
 	"xolox/vim-misc",
+	"aklt/plantuml-syntax",
 	-- Temp replacement for hrsh7th/nvim-cmp with cmp window above line for Copilot
 	{ "hrsh7th/cmp-nvim-lsp", dependencies = { "neovim/nvim-lspconfig" } },
 	{ "knubie/vim-kitty-navigator", build = "cp ./*.py ~/.config/kitty/" },
 	{ "romgrk/barbar.nvim", dependencies = { "lewis6991/gitsigns.nvim", "nvim-tree/nvim-web-devicons" } },
-	{ "tzachar/cmp-ai", dependencies = "nvim-lua/plenary.nvim" },
+	{ "tzachar/cmp-ai", dependencies = { "nvim-lua/plenary.nvim" } },
+	{ "williamboman/mason.nvim", config = "mason" },
+	{ "L3MON4D3/LuaSnip", config = "luasnip" },
+	{ "nvim-treesitter/nvim-treesitter", config = "treesitter" },
+	{ "rcarriga/nvim-notify", config = "notify" },
+	{ "dense-analysis/ale", config = "ale" },
+	{ "zbirenbaum/copilot.lua", config = "copilot" },
+	{ "kkoomen/vim-doge", build = ":call doge#install()" },
+	{ "https://gitlab.com/HiPhish/rainbow-delimiters.nvim", config = "rainbow_delimiters" },
+	{ "folke/zen-mode.nvim", options = "zen" },
+	{ "williamboman/mason-lspconfig.nvim", config = "mason_lspconfig", dependencies = { "williamboman/mason.nvim" } },
 	{
 		"nvim-lualine/lualine.nvim",
 		dependencies = { "ryanoasis/vim-devicons", "nvim-tree/nvim-web-devicons", "nvim-lua/lsp-status.nvim" },
-	},
-}
-
-local plugins_async = {
-	{
-		"dense-analysis/ale",
-		event = { "BufReadPost" },
-		config = "ale",
+		config = "lualine",
 	},
 	{
 		"lewis6991/gitsigns.nvim",
 		dependencies = { "nvim-lua/plenary.nvim" },
-		event = { "BufReadPost" },
 		config = "gitsigns",
 	},
 	{
 		"llllvvuu/nvim-cmp",
 		branch = "feat/above",
 		dependencies = { "hrsh7th/cmp-nvim-lsp", "tzachar/cmp-ai" },
-		event = { "InsertEnter", "CmdlineEnter" },
 		config = "cmp",
 	},
 	{
-		"zbirenbaum/copilot.lua",
-		event = { "BufReadPost" },
-		config = "copilot",
-	},
-	{
 		"CopilotC-Nvim/CopilotChat.nvim",
-		event = { "BufReadPost" },
+		event = "VeryLazy",
+		dependencies = { "zbirenbaum/copilot.lua", "nvim-lua/plenary.nvim" },
+		build = "make tiktoken",
 		config = "copilot_chat",
 	},
 	{
 		"folke/noice.nvim",
-		event = "VeryLazy",
 		dependencies = { "MunifTanjim/nui.nvim", "rcarriga/nvim-notify" },
 		config = "noice",
 	},
 	{
 		"windwp/nvim-autopairs",
-		event = { "InsertEnter" },
+		event = "InsertEnter",
 		config = "autopairs",
 	},
 	{
 		"jonahgoldwastaken/copilot-status.nvim",
 		dependencies = { "zbirenbaum/copilot.lua" },
-		event = "BufReadPost",
 		config = "copilot_status",
-	},
-	{
-		"kkoomen/vim-doge",
-		build = ":call doge#install()",
-		event = "BufReadPost",
-		config = nil,
 	},
 	{
 		"nvim-telescope/telescope.nvim",
 		dependencies = { "nvim-lua/plenary.nvim" },
-		event = { "BufReadPost" },
 		config = "telescope",
-	},
-	{
-		"https://gitlab.com/HiPhish/rainbow-delimiters.nvim",
-		event = { "BufReadPost" },
-		config = "rainbow_delimiters",
 	},
 	{
 		"lukas-reineke/indent-blankline.nvim",
 		main = "ibl",
-		event = "BufReadPost",
 		config = "indent_blankline",
-		after = { "https://gitlab.com/HiPhish/rainbow-delimiters.nvim" },
+		dependencies = { "https://gitlab.com/HiPhish/rainbow-delimiters.nvim" },
 	},
 	{
 		"nvim-tree/nvim-tree.lua",
 		dependencies = { "ryanoasis/vim-devicons" },
-		event = { "BufReadPost" },
+		cmd = "NvimTreeToggle",
 		config = "tree",
 	},
 	{
 		"nvim-treesitter/nvim-treesitter-textobjects",
 		dependencies = { "nvim-treesitter/nvim-treesitter" },
-		event = { "BufReadPost" },
 		config = "treesitter_textobjects",
 	},
 	{
 		"folke/trouble.nvim",
 		dependencies = { "nvim-tree/nvim-web-devicons" },
-		cmd = "Trouble",
 		config = "trouble",
 	},
+	{
+		"ray-x/go.nvim",
+		config = "go",
+		dependencies = {
+			"ray-x/guihua.lua",
+			"neovim/nvim-lspconfig",
+			"nvim-treesitter/nvim-treesitter",
+		},
+		build = ':lua require("go.install").update_all_sync()',
+	},
 	-- {
-	-- 	"stevearc/vim-arduino",
-	-- 	event = { "BufReadPost" },
-	-- 	config = "arduino",
+	-- 	"folke/which-key.nvim",
+	-- 	options = "whichkey",
+	-- 	event = "VeryLazy",
 	-- },
+	{
+		"folke/todo-comments.nvim",
+		dependencies = { "nvim-lua/plenary.nvim" },
+		options = "todo",
+	},
 }
 
-for _, v in ipairs(plugins_async) do
+for _, v in ipairs(plugins) do
 	if v.config then
-		table.insert(
-			plugins,
-			vim.tbl_extend("force", v, {
-				["config"] = require("plugins.async." .. v.config),
-			})
-		)
-	else
-		table.insert(plugins, v)
+		local config = v.config
+		v.config = function()
+			require("plugins.config." .. config)()
+		end
+	end
+	if v.options then
+		local options = v.options
+		v.options = function()
+			require("plugins.options." .. options)
+		end
+	end
+	if v.dependencies then
+		local dependencies = v.dependencies
+		local after = v.after or {}
+		after = vim.tbl_extend("force", after, dependencies)
+		v.after = after
 	end
 end
-
--- Dump plugins table to file
-
-local file = io.open(vim.fn.stdpath("data") .. "/plugins.lua", "w")
-file:write("return " .. vim.inspect(plugins))
-file:close()
 
 vim.fn.system({
 	"git",

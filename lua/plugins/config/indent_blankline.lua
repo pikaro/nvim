@@ -19,7 +19,7 @@ return function()
 	file:close()
 
 	require("ibl").setup({
-		scope = { highlight = vim.g.rainbow_delimiters.highlight },
+		scope = { highlight = require("rainbow-delimiters").highlight },
 		indent = {
 			char = "│",
 			priority = 1,

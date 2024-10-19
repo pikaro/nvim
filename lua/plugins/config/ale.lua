@@ -23,7 +23,7 @@ vim.g.ale_linters = {
 	["bash"] = {},
 	["terraform"] = {},
 	["ansible"] = {},
-	["python"] = {},
+	["python"] = { "ruff" },
 }
 
 -- Previously used, now covered by LSP

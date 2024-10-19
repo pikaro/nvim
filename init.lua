@@ -1,6 +1,5 @@
 require("lazy_plugins")
 require("general")
-require("plugins.sync")
 require("plugins.misc")
 require("filetype")
 require("keybinds")

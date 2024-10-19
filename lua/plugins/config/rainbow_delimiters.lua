@@ -8,6 +8,8 @@ local highlight = {
 	"RainbowCyan",
 }
 
-vim.g.rainbow_delimiters = { highlight = highlight }
-
-return function() end
+return function()
+	require("rainbow-delimiters.setup").setup({
+		highlight = highlight,
+	})
+end

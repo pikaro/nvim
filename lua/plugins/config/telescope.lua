@@ -9,7 +9,14 @@ return function()
 					["<C-Up>"] = telescope_actions.cycle_history_prev,
 				},
 			},
-			file_ignore_patterns = { "node_modules/*", ".venv/*", "venv/*", "__pycache__/*" },
+			file_ignore_patterns = {
+				".venv/.*",
+				"__pycache__/.*",
+				"node_modules/.*",
+				"venv/.*",
+				"^build/.*",
+				"^dist/.*",
+			},
 		},
 	})
 end

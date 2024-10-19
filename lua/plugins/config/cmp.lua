@@ -13,7 +13,7 @@ return function()
 			format = lspkind.cmp_format({
 				mode = "symbol_text",
 				maxwidth = 50,
-				ellipsis_char = "...",
+				ellipsis_char = "…",
 				show_labelDetails = true,
 			}),
 		},
@@ -27,7 +27,14 @@ return function()
 			-- Use via keybind instead -- { name = 'cmp_ai' },
 			-- DOES work even if CmpStatus says no - enter Insert first
 			{ name = "nvim_lsp" },
-			{ name = "buffer" },
+			{
+				name = "buffer",
+				option = {
+					get_bufnrs = function()
+						return vim.api.nvim_list_bufs()
+					end,
+				},
+			},
 		},
 		view = {
 			entries = {

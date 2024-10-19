@@ -45,7 +45,11 @@ local function get_predefined(parser, kind)
 end
 
 local function get_languages()
-	return string.match(vim.bo.filetype, "^([^.]+)%.([^.]+)$")
+	local languages = {}
+	for _, lang in ipairs(require("functions.split")(vim.bo.filetype, ".")) do
+		table.insert(languages, lang)
+	end
+	return languages
 end
 
 local function get_extended(language, kind)
@@ -54,22 +58,24 @@ local function get_extended(language, kind)
 	return read_file(path)
 end
 
-local function extend_queries(parser, language)
-	if not parser or not language then
+local function extend_queries(languages)
+	if #languages < 2 then
 		return
 	end
+	local parser = table.remove(languages, 1)
 	local kinds = { "highlights", "injections" }
 	for _, kind in ipairs(kinds) do
 		local predefined = get_predefined(parser, kind) or ""
 		local extended = ""
-		local language_extended = get_extended(language, kind) or ""
-		local filetype_extended = get_extended(vim.bo.filetype, kind) or ""
 
-		if language_extended ~= "" then
-			extended = extended .. language_extended .. "\n"
-		end
-		if filetype_extended ~= "" then
-			extended = extended .. filetype_extended .. "\n"
+		for _, language in ipairs(languages) do
+			for _, extension in ipairs({ language, parser .. "." .. language, vim.bo.filetype }) do
+				local language_extended = get_extended(extension, kind) or ""
+				if language_extended ~= "" then
+					language_extended = language_extended .. "\n"
+				end
+				extended = extended .. language_extended
+			end
 		end
 
 		if extended ~= "" then

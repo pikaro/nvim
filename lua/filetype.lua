@@ -12,16 +12,20 @@ vim.filetype.add({
 	pattern = {
 		["%.env%..*"] = "env",
 		["env%..*"] = "env",
-		["docker%-compose%.ya?ml.*"] = "yaml.compose",
+
+		["docker%-compose%.ya?ml.*%.j2"] = { "yaml.compose.jinja", { priority = 0 } },
+		["docker%-compose%.ya?ml.*"] = { "yaml.compose", { priority = -10 } },
+		[".*%.ya?ml%.tpl%.j2"] = { "yaml.jinja", { priority = -20 } },
+		[".*%.ya?ml%.j2"] = { "yaml.jinja", { priority = -20 } },
+		[".*%.j2"] = { "jinja", { priority = -100 } },
+
 		["%.gitlab%-ci%.yml"] = "yaml.gitlabci",
 		[".*/gitlab%-ci/.*%.yml"] = "yaml.gitlabci",
-		[".*%.ya?ml%.j2"] = "yaml.jinja",
 		[".*%.ini%.j2"] = "ini.jinja",
 		[".*%.json%.j2"] = "json.jinja",
 		[".*%.rb%.j2"] = "ruby.jinja",
 		[".*%.sh%.j2"] = "bash.jinja",
 		[".*%.toml%.j2"] = "toml.jinja",
-		[".*%.ya?ml%.tpl%.j2"] = "yaml.jinja",
 		[".*%.ini%.tpl%.j2"] = "ini.jinja",
 		[".*%.json%.tpl%.j2"] = "json.jinja",
 		[".*%.rb%.tpl%.j2"] = "ruby.jinja",
@@ -32,7 +36,6 @@ vim.filetype.add({
 		[".*%.ini%.tpl"] = "ini",
 		[".*%.toml%.tpl"] = "toml",
 		[".*%.xml%.tpl"] = "xml",
-		[".*%.j2"] = { "jinja", priority = -1 },
 	},
 })
 

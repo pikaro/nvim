@@ -13,13 +13,8 @@ return function()
 		vim.api.nvim_set_hl(0, "RainbowCyan", { fg = "#56B6C2" })
 	end)
 
-	-- dump delimiters to file
-	local file = io.open(vim.fn.stdpath("data") .. "/delimiters.lua", "w")
-	file:write("return " .. vim.inspect(vim.g.rainbow_delimiters))
-	file:close()
-
 	require("ibl").setup({
-		scope = { highlight = require("rainbow-delimiters").highlight },
+		scope = { highlight = vim.g.rainbow_delimiters.highlight },
 		indent = {
 			char = "│",
 			priority = 1,

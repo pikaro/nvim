@@ -1,4 +1,5 @@
 local plugins = {
+	{ "ellisonleao/gruvbox.nvim", lazy = false, config = "gruvbox" },
 	"Afourcat/treesitter-terraform-doc.nvim",
 	"haya14busa/vim-asterisk",
 	"hrsh7th/cmp-buffer",
@@ -6,7 +7,6 @@ local plugins = {
 	"jez/vim-superman",
 	-- "lepture/vim-jinja",
 	"mfussenegger/nvim-ansible",
-	"ellisonleao/gruvbox.nvim",
 	"neovim/nvim-lspconfig",
 	"nvim-lua/lsp-status.nvim",
 	"nvim-lua/plenary.nvim",
@@ -33,7 +33,6 @@ local plugins = {
 	{ "zbirenbaum/copilot.lua", config = "copilot" },
 	{ "kkoomen/vim-doge", build = ":call doge#install()" },
 	{ "https://gitlab.com/HiPhish/rainbow-delimiters.nvim", config = "rainbow_delimiters" },
-	{ "folke/zen-mode.nvim", options = "zen" },
 	{ "williamboman/mason-lspconfig.nvim", config = "mason_lspconfig", dependencies = { "williamboman/mason.nvim" } },
 	{
 		"nvim-lualine/lualine.nvim",
@@ -112,13 +111,18 @@ local plugins = {
 	},
 	-- {
 	-- 	"folke/which-key.nvim",
-	-- 	options = "whichkey",
+	-- 	opts = "whichkey",
 	-- 	event = "VeryLazy",
 	-- },
 	{
 		"folke/todo-comments.nvim",
 		dependencies = { "nvim-lua/plenary.nvim" },
-		options = "todo",
+		opts = "todo",
+	},
+	{
+		"folke/zen-mode.nvim",
+		opts = "zen",
+		dependencies = { "folke/todo-comments.nvim" },
 	},
 }
 
@@ -129,11 +133,9 @@ for _, v in ipairs(plugins) do
 			require("plugins.config." .. config)()
 		end
 	end
-	if v.options then
-		local options = v.options
-		v.options = function()
-			require("plugins.options." .. options)
-		end
+	if v.opts then
+		local options = v.opts
+		v.opts = require("plugins.options." .. options)
 	end
 	if v.dependencies then
 		local dependencies = v.dependencies

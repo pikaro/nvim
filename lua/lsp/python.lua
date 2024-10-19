@@ -1,7 +1,7 @@
 local lspconfig = require("lspconfig")
 
 return {
-	lsp = lspconfig.pyright,
+	lsp = lspconfig.basedpyright,
 	options = {
 		single_file_support = true,
 	},

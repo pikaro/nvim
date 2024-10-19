@@ -38,7 +38,7 @@ end
 vim.g.vimsyn_embed = "lPr"
 
 -- Limit the number of autocompletion options
-vim.opt.pumheight = 5
+vim.opt.pumheight = 10
 
 -- Switch between two colorschemes when switching windows
 set_hl("ActiveWindow", { bg = "#1c1c1c", fg = get_hl("Normal").foreground })

@@ -21,7 +21,6 @@ return function()
 			"rust_analyzer",
 			"terraformls",
 			"texlab",
-			-- FIXME: This one is not even loading
 			"ts_ls",
 			"yamlls",
 		},

@@ -5,9 +5,7 @@ return {
 	filetypes = { "go", "gomod", "gowork", "gotmpl" },
 	settings = {
 		gopls = {
-			formatting = {
-				gofumpt = true,
-			},
+			gofumpt = true,
 			analyses = {
 				unusedparams = true,
 				unusedvariable = true,

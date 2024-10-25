@@ -48,7 +48,7 @@ map.nnoremaps("|", ":vsplit<cr>")
 
 -- Telescope
 map.nnoremaps("<C-p>", function()
-	require("telescope.builtin").find_files()
+	require("telescope.builtin").find_files({ hidden = true })
 end)
 map.nnoremaps("<C-o>", function()
 	require("telescope.builtin").live_grep()

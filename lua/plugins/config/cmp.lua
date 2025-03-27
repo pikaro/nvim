@@ -6,9 +6,10 @@ end
 
 return function()
 	local lspkind = require("lspkind")
-	local luasnip = require("luasnip")
+	-- local luasnip = require("luasnip")
 	local cmp = require("cmp")
 	cmp.setup({
+		preselect = cmp.PreselectMode.None,
 		formatting = {
 			format = lspkind.cmp_format({
 				mode = "symbol_text",
@@ -17,13 +18,13 @@ return function()
 				show_labelDetails = true,
 			}),
 		},
-		snippet = {
-			expand = function(args)
-				require("luasnip").lsp_expand(args.body)
-			end,
-		},
+		-- snippet = {
+		-- 	expand = function(args)
+		-- 		require("luasnip").lsp_expand(args.body)
+		-- 	end,
+		-- },
 		sources = {
-			{ name = "luasnip" },
+			-- { name = "luasnip" },
 			-- Use via keybind instead -- { name = 'cmp_ai' },
 			-- DOES work even if CmpStatus says no - enter Insert first
 			{ name = "nvim_lsp" },
@@ -53,8 +54,8 @@ return function()
 			["<Tab>"] = cmp.mapping(function(fallback)
 				if cmp.visible() then
 					cmp.select_next_item()
-				elseif luasnip.expand_or_jumpable() then
-					luasnip.expand_or_jump()
+				--	elseif luasnip.expand_or_jumpable() then
+				--		luasnip.expand_or_jump()
 				elseif has_words_before() then
 					cmp.complete()
 				else
@@ -65,8 +66,8 @@ return function()
 			["<S-Tab>"] = cmp.mapping(function(fallback)
 				if cmp.visible() then
 					cmp.select_prev_item()
-				elseif luasnip.jumpable(-1) then
-					luasnip.jump(-1)
+				-- elseif luasnip.jumpable(-1) then
+				--	luasnip.jump(-1)
 				else
 					fallback()
 				end

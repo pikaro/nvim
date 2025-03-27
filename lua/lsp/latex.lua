@@ -7,7 +7,7 @@ return {
 		texlab = {
 			bibtexFormatter = "texlab",
 			build = {
-				args = { "-pdf", "-interaction=nonstopmode", "-synctex=1", "%f" },
+				args = { "--shell-escape", "-pdf", "-interaction=nonstopmode", "-synctex=1", "%f" },
 				executable = "latexmk",
 				forwardSearchAfter = false,
 				onSave = true,

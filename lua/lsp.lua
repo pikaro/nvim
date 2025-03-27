@@ -11,6 +11,8 @@ local default_config = {
 	underline = false,
 }
 
+vim.lsp.set_log_level("ERROR")
+
 local languages = require("functions.strippednames")(require("functions.basenames")(require("functions.ls")("lsp")))
 
 local lsp_status = require("lsp-status")
@@ -29,13 +31,19 @@ for _, language in ipairs(languages) do
 		local filetypes = config.filetypes or { language }
 		local settings = config.settings or {}
 		local lsp_capabilities = vim.tbl_extend("keep", capabilities, config.capabilities or {})
-		local on_attach = config.on_attach
-				and function(client, bufnr)
-					config.on_attach(client, bufnr)
-					lsp_status.on_attach(client, bufnr)
-				end
-			or lsp_status.on_attach
-		vim.diagnostic.config(diagnostics)
+		local handlers = config.handlers or {}
+
+		local on_attach = function(client, bufnr)
+			lsp_status.on_attach(client, bufnr)
+			if config.diagnostics then
+				local namespace = vim.lsp.diagnostic.get_namespace(client.id)
+				vim.diagnostic.config(config.diagnostics, namespace)
+			end
+			if config.on_attach then
+				config.on_attach(client, bufnr)
+			end
+		end
+
 		local options = {
 			cmd = cmd,
 			init_options = init_options,
@@ -44,6 +52,8 @@ for _, language in ipairs(languages) do
 			capabilities = lsp_capabilities,
 			root_dir = config.root_dir,
 			settings = settings,
+			diagnostics = config.diagnostics,
+			handlers = handlers,
 		}
 		lsp.setup(vim.tbl_extend("force", options, config.options or {}))
 	end

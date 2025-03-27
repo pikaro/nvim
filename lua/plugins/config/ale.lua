@@ -24,6 +24,7 @@ vim.g.ale_linters = {
 	["ansible"] = {},
 	["python"] = { "ruff" },
 	["sh"] = {},
+	["go"] = {},
 }
 
 vim.g.ale_fixers = {
@@ -48,5 +49,8 @@ vim.g.ale_fixers = {
 vim.g.ale_echo_cursor = 0
 vim.g.ale_warn_about_trailing_whitespace = 0
 vim.g.ale_set_highlights = 0
+
+vim.g.ale_python_ruff_options = "--force-exclude"
+vim.g.ale_python_ruff_format_options = "--force-exclude"
 
 return function() end

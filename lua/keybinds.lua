@@ -42,6 +42,10 @@ map.nnoremaps("<S-l>", ":BufferNext<cr>")
 -- Jump to beginning of line with 0
 map.noremaps("0", "^")
 
+-- Jump to matching symbol with ; instead of %
+map.nnoremaps(";", "%")
+map.vnoremaps(";", "%")
+
 -- Splits
 map.nnoremaps("-", ":split<cr>")
 map.nnoremaps("|", ":vsplit<cr>")
@@ -86,9 +90,23 @@ map.nnoremaps("<leader>t", function()
 end)
 map.nnoremaps("<leader>T", ":TodoTrouble toggle<cr>")
 map.nnoremaps("<leader>e", vim.diagnostic.open_float)
-map.nnoremaps("<leader>D", vim.diagnostic.goto_prev)
-map.nnoremaps("<leader>d", vim.diagnostic.goto_next)
+
+local function diag_error_next()
+	vim.diagnostic.goto_next({ count = 1, severity = vim.diagnostic.severity.ERROR })
+end
+
+local function diag_error_prev()
+	vim.diagnostic.jump({ count = -1, severity = vim.diagnostic.severity.ERROR })
+end
+
+map.nnoremaps("[d", vim.diagnostic.goto_prev)
+map.nnoremaps("]d", vim.diagnostic.goto_next)
 map.nnoremaps("<leader>q", vim.diagnostic.setloclist)
+
+-- Spectre
+map.nnoremaps("<leader>S", function()
+	require("spectre").open()
+end)
 
 -- Copilot
 local function ask_copilot(target)

@@ -22,7 +22,7 @@ local plugins = {
 	{ "towolf/vim-helm", ft = "helm" },
 	-- Temp replacement for hrsh7th/nvim-cmp with cmp window above line for Copilot
 	{ "hrsh7th/cmp-nvim-lsp", dependencies = { "neovim/nvim-lspconfig" } },
-	{ "knubie/vim-kitty-navigator", build = "cp ./*.py ~/.config/kitty/" },
+	{ "knubie/vim-kitty-navigator" },
 	{ "romgrk/barbar.nvim", dependencies = { "lewis6991/gitsigns.nvim", "nvim-tree/nvim-web-devicons" } },
 	{ "tzachar/cmp-ai", dependencies = { "nvim-lua/plenary.nvim" } },
 	{ "williamboman/mason.nvim", config = "mason" },

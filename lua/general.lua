@@ -61,8 +61,6 @@ o.cmdheight = 2
 --  A buffer becomes hidden when it is abandoned
 o.hidden = true
 
-vim.wo.relativenumber = true
-
 --  Configure backspace so it acts as it should act
 o.backspace = { "eol", "start", "indent" }
 
@@ -105,7 +103,8 @@ o.swapfile = false
 --  Enable level folding
 o.foldenable = true
 o.foldlevel = 10
-o.foldmethod = "syntax"
+o.foldmethod = "expr"
+o.foldexpr = "nvim_treesitter#foldexpr()"
 
 --  Use spaces instead of tabs
 o.expandtab = true
@@ -130,9 +129,14 @@ o.signcolumn = "yes"
 -- Show numbers and relativenumber
 o.number = true
 o.relativenumber = true
+vim.wo.number = true
+vim.wo.relativenumber = true
 
 -- Set viminfo
 o.viminfo = "<1000,'50,/50,:1000,h,f0"
 
 -- Copy to system clipboard
 o.clipboard = "unnamedplus"
+
+-- Syntax
+o.syntax = "off"

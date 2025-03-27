@@ -12,6 +12,7 @@ return function()
 			-- TODO: How to correctly resolve includes in CI repo?
 			"gitlab_ci_ls",
 			"gopls",
+			"helm_ls",
 			-- FIXME: Does not seem to be doing anything
 			"jinja_lsp",
 			"jsonls",

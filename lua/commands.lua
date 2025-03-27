@@ -28,6 +28,11 @@ cmd("ALEToggleFixers", function()
 	vim.g.ale_fix_on_save = vim.g.ale_fix_on_save == 0 and 1 or 0
 end)
 
+cmd("VimLog", function()
+	local log = vim.fn.stdpath("log") .. "/log"
+	vim.cmd("edit " .. log)
+end)
+
 cmd("W", function()
 	local file = vim.fn.expand("%")
 	if vim.fn.empty(vim.fn.getbufvar(vim.fn.bufname("%"), "&buftype")) and not file:match("^%w+:/") then

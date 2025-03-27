@@ -5,13 +5,18 @@ vim.filetype.add({
 		["env"] = "env",
 	},
 	extension = {
+		["tf"] = "terraform",
 		["tfvars"] = "terraform-vars",
 		["tftpl"] = "terraform-tpl",
 		["puml"] = "plantuml",
+		["mount"] = "systemd",
+		["service"] = "systemd",
 	},
 	pattern = {
 		["%.env%..*"] = "env",
 		["env%..*"] = "env",
+
+		[".*%.tftest%.hcl"] = "terraform-test",
 
 		["docker%-compose%.ya?ml.*%.j2"] = { "yaml.compose.jinja", { priority = 0 } },
 		["docker%-compose%.ya?ml.*"] = { "yaml.compose", { priority = -10 } },
@@ -36,11 +41,21 @@ vim.filetype.add({
 		[".*%.ini%.tpl"] = "ini",
 		[".*%.toml%.tpl"] = "toml",
 		[".*%.xml%.tpl"] = "xml",
+
+		[".*%.mount%.j2"] = "systemd.jinja",
+		[".*%.service%.j2"] = "systemd.jinja",
 	},
 })
 
 local ft_options = {
 	["yaml"] = {
+		shiftwidth = 2,
+		tabstop = 2,
+		softtabstop = 2,
+		colorcolumn = "100",
+		indentkeys = "!^F,o,O,0#,0},0],0-",
+	},
+	["helm"] = {
 		shiftwidth = 2,
 		tabstop = 2,
 		softtabstop = 2,
@@ -80,6 +95,9 @@ local ft_options = {
 		shiftwidth = 2,
 		tabstop = 2,
 		softtabstop = 2,
+		colorcolumn = "100",
+	},
+	["go"] = {
 		colorcolumn = "100",
 	},
 }

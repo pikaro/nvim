@@ -62,6 +62,12 @@ local ft_options = {
 		colorcolumn = "100",
 		indentkeys = "!^F,o,O,0#,0},0],0-",
 	},
+	["nix"] = {
+		shiftwidth = 2,
+		tabstop = 2,
+		softtabstop = 2,
+		colorcolumn = "100",
+	},
 	["json"] = {
 		shiftwidth = 2,
 		tabstop = 2,

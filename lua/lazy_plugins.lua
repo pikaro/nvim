@@ -158,7 +158,7 @@ vim.fn.system({
 	"clone",
 	"--depth=1",
 	"--filter=blob:none",
-	"https://github.com/folke/lazy.nvim",
+	"https://github.com/folke/lazy.nvim.git",
 	"--branch=stable",
 	vim.fn.stdpath("data") .. "/lazy/lazy.nvim",
 })

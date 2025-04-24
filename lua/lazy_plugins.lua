@@ -19,6 +19,7 @@ local plugins = {
 	"xolox/vim-misc",
 	"aklt/plantuml-syntax",
 	"creativenull/efmls-configs-nvim",
+	"tpope/vim-fugitive",
 	{ "towolf/vim-helm", ft = "helm" },
 	-- Temp replacement for hrsh7th/nvim-cmp with cmp window above line for Copilot
 	{ "hrsh7th/cmp-nvim-lsp", dependencies = { "neovim/nvim-lspconfig" } },
@@ -86,7 +87,6 @@ local plugins = {
 	{
 		"nvim-tree/nvim-tree.lua",
 		dependencies = { "ryanoasis/vim-devicons" },
-		cmd = "NvimTreeToggle",
 		config = "tree",
 	},
 	{

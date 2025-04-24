@@ -26,6 +26,7 @@ map.nnoremaps("cW", "ciW")
 
 -- Disable highlight when <leader><leader> is pressed
 map.noremaps("<leader><leader>", ":noh<cr>")
+map.noremaps("<localleader><localleader>", ":noh<cr>")
 
 -- Kitty navigator - either switch Vim panes if present or switch kitty windows
 for _, fn in pairs({ map.nnoremaps, map.inoremaps, map.snoremaps }) do
@@ -82,7 +83,16 @@ map.nnoremaps("{", "<Cmd>keepjumps normal! {<CR>")
 map.nnoremaps("}", "<Cmd>keepjumps normal! }<CR>")
 
 -- nvim-tree
-map.nnoremaps("<C-t>", ":NvimTreeToggle<CR>")
+local function tree_focus_or_toggle()
+	local api = require("nvim-tree.api").tree
+	local view = require("nvim-tree.view")
+	if view.is_visible() then
+		api.focus()
+	else
+		api.toggle()
+	end
+end
+map.nnoremaps("<C-t>", tree_focus_or_toggle)
 
 -- LSP
 map.nnoremaps("<leader>t", function()
@@ -135,6 +145,17 @@ end)
 -- WhichKey
 map.nnoremaps("<leader>?", function()
 	require("which-key").show({ global = false })
+end)
+
+-- Fugitive
+map.nnoremaps("<leader>hh", function()
+	vim.cmd.Git({ mods = { float = true } })
+end)
+map.nnoremaps("<leader>hc", function()
+	vim.cmd.Git({ args = { "commit" } })
+end)
+map.nnoremaps("<leader>hp", function()
+	vim.cmd.Git({ args = { "push" } })
 end)
 
 -- LSP

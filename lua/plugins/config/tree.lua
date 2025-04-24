@@ -8,8 +8,8 @@ return function()
 		hijack_unnamed_buffer_when_opening = false,
 		root_dirs = {},
 		prefer_startup_root = false,
-		sync_root_with_cwd = false,
-		reload_on_bufenter = false,
+		sync_root_with_cwd = true,
+		reload_on_bufenter = true,
 		respect_buf_cwd = false,
 		select_prompts = false,
 		sort = {
@@ -18,26 +18,26 @@ return function()
 			files_first = false,
 		},
 		view = {
-			centralize_selection = false,
-			cursorline = true,
-			debounce_delay = 15,
-			side = "left",
-			preserve_window_proportions = false,
-			number = false,
-			relativenumber = false,
-			signcolumn = "no",
-			width = 30,
+			centralize_selection = true,
+			adaptive_size = false,
+			side = "right",
+			preserve_window_proportions = true,
+			width = {
+				max = -1,
+			},
 			float = {
-				enable = false,
-				quit_on_focus_loss = true,
-				open_win_config = {
-					relative = "editor",
-					border = "rounded",
-					width = 30,
-					height = 30,
-					row = 1,
-					col = 1,
-				},
+				enable = true,
+				quit_on_focus_loss = false,
+				open_win_config = function()
+					return {
+						row = 2,
+						width = 30,
+						border = "rounded",
+						relative = "editor",
+						col = vim.o.columns,
+						height = vim.o.lines - 5,
+					}
+				end,
 			},
 		},
 		renderer = {
@@ -124,8 +124,8 @@ return function()
 			},
 		},
 		hijack_directories = {
-			enable = true,
-			auto_open = true,
+			enable = false,
+			auto_open = false,
 		},
 		update_focused_file = {
 			enable = true,
@@ -275,5 +275,23 @@ return function()
 				watcher = false,
 			},
 		},
+	})
+
+	local function open_tree_on_setup(args)
+		vim.schedule(function()
+			local file = args.file
+			local is_directory = vim.fn.isdirectory(file) == 1
+
+			if is_directory then
+				require("nvim-tree.api").tree.open({
+					current_window = false,
+				})
+			end
+		end)
+	end
+
+	vim.api.nvim_create_autocmd("BufEnter", {
+		group = vim.api.nvim_create_augroup("nvim-tree", { clear = true }),
+		callback = open_tree_on_setup,
 	})
 end

@@ -1,5 +1,5 @@
-require("lazy_plugins")
 require("general")
+require("lazy_plugins")
 require("plugins.misc")
 require("filetype")
 require("keybinds")

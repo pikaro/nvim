@@ -22,7 +22,15 @@ return function()
 			map("n", "<leader>hd", gs.diffthis)
 			map("n", "<leader>hB", gs.blame)
 			map("n", "<leader>hb", gs.blame_line)
-			map("n", "<leader>hD", gs.toggle_deleted)
+			map("n", "<leader>ha", gs.stage_buffer)
+			map("n", "<leader>hA", gs.reset_buffer_index)
+			map("n", "<leader>hs", gs.stage_hunk)
+			map("n", "<leader>hr", gs.reset_hunk)
+			map("n", "<leader>hR", gs.reset_buffer)
+			map("n", "<leader>hv", gs.preview_hunk)
+			-- FIXME: Use <localleader>[
+			map("n", "<leader>[", gs.prev_hunk)
+			map("n", "<leader>]", gs.next_hunk)
 		end,
 	})
 end

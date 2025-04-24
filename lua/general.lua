@@ -12,6 +12,7 @@ o.history = 500
 o.autoread = true
 
 vim.g.mapleader = "\\"
+vim.g.maplocalleader = "<BS>"
 
 -- """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 --  => VIM user interface

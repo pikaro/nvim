@@ -28,9 +28,8 @@ return function()
 			map("n", "<leader>hr", gs.reset_hunk)
 			map("n", "<leader>hR", gs.reset_buffer)
 			map("n", "<leader>hv", gs.preview_hunk)
-			-- FIXME: Use <localleader>[
-			map("n", "<leader>[", gs.prev_hunk)
-			map("n", "<leader>]", gs.next_hunk)
+			map("n", "[h", gs.prev_hunk)
+			map("n", "]h", gs.next_hunk)
 		end,
 	})
 end

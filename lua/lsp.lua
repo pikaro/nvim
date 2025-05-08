@@ -8,6 +8,7 @@ local function ft_config(language)
 end
 
 local default_config = {
+	priority = 1,
 	underline = false,
 }
 
@@ -27,15 +28,11 @@ for _, language in ipairs(languages) do
 		local lsp = config.lsp
 		local cmd = config.cmd
 		local init_options = config.init_options
-		-- local diagnostics = vim.tbl_extend("force", default_config, config.diagnostics or {})
+		local diagnostics = vim.tbl_extend("force", default_config, config.diagnostics or {})
 		local filetypes = config.filetypes or { language }
 		local settings = config.settings or {}
 		local lsp_capabilities = vim.tbl_extend("keep", capabilities, config.capabilities or {})
 		local handlers = config.handlers or {}
-
-		local diagnostics = vim.tbl_extend("force", config.diagnostics or {}, {
-			priority = 1,
-		})
 
 		local on_attach = function(client, bufnr)
 			lsp_status.on_attach(client, bufnr)

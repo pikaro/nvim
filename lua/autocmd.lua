@@ -41,3 +41,17 @@ end)
 -- aucmd({ "BufWritePost" }, "*.go", function()
 -- 	vim.cmd("silent! GoCoverage")
 -- end)
+
+local original_diag_settings = {}
+
+aucmd({ "InsertEnter" }, "*", function()
+	vim.diagnostic.config({
+		virtual_text = false,
+	})
+end)
+
+aucmd({ "InsertLeave" }, "*", function()
+	vim.diagnostic.config({
+		virtual_text = true,
+	})
+end)

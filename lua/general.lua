@@ -12,7 +12,7 @@ o.history = 500
 o.autoread = true
 
 vim.g.mapleader = "\\"
-vim.g.maplocalleader = "<BS>"
+vim.g.maplocalleader = vim.api.nvim_replace_termcodes("<BS>", true, true, true)
 
 -- """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 --  => VIM user interface

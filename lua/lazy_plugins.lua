@@ -20,6 +20,7 @@ local plugins = {
 	"aklt/plantuml-syntax",
 	"creativenull/efmls-configs-nvim",
 	"tpope/vim-fugitive",
+	"lukas-reineke/cmp-under-comparator",
 	{ "towolf/vim-helm", ft = "helm" },
 	-- Temp replacement for hrsh7th/nvim-cmp with cmp window above line for Copilot
 	{ "hrsh7th/cmp-nvim-lsp", dependencies = { "neovim/nvim-lspconfig" } },

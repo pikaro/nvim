@@ -4,6 +4,7 @@ return function()
 		multiwindow = true,
 		line_numbers = true,
 	})
-	vim.api.nvim_set_hl(0, "TreesitterContext", { bg = "#ff00ff", link = "NONE" })
-	vim.api.nvim_set_hl(0, "TreesitterContextBottom", { bg = "#00ff00", link = "NONE" })
+	vim.api.nvim_set_hl(0, "TreesitterContext", { link = "ColorColumn" })
+	vim.api.nvim_set_hl(0, "TreesitterContextLineNumber", { link = "Special" })
+	vim.api.nvim_set_hl(0, "TreesitterContextBottom", { link = "ColorColumn" })
 end

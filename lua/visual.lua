@@ -40,6 +40,20 @@ vim.g.vimsyn_embed = "lPr"
 -- Limit the number of autocompletion options
 vim.opt.pumheight = 10
 
+local set_hl_for_floating_window = function()
+	vim.api.nvim_set_hl(0, "NormalFloat", {
+		bg = "#4f4a46",
+	})
+end
+
+set_hl_for_floating_window()
+
+vim.api.nvim_create_autocmd("ColorScheme", {
+	pattern = "*",
+	desc = "Avoid overwritten by loading color schemes later",
+	callback = set_hl_for_floating_window,
+})
+
 -- Switch between two colorschemes when switching windows
 set_hl("ActiveWindow", { bg = "#1c1c1c", fg = get_hl("Normal").foreground })
 set_hl("InactiveWindow", { bg = "#262626", fg = get_hl("Normal").foreground })

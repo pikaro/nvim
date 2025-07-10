@@ -96,7 +96,7 @@ map.nnoremaps("<C-t>", tree_focus_or_toggle)
 
 -- LSP
 map.nnoremaps("<leader>t", function()
-	require("trouble").toggle("diagnostics")
+	require("trouble").toggle("cascade")
 end)
 map.nnoremaps("<leader>T", ":TodoTrouble toggle<cr>")
 map.nnoremaps("<leader>e", vim.diagnostic.open_float)

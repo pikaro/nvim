@@ -85,8 +85,7 @@ map.nnoremaps("}", "<Cmd>keepjumps normal! }<CR>")
 -- nvim-tree
 local function tree_focus_or_toggle()
 	local api = require("nvim-tree.api").tree
-	local view = require("nvim-tree.view")
-	if view.is_visible() then
+	if api.is_visible() then
 		api.focus()
 	else
 		api.toggle()

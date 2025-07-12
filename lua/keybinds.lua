@@ -100,16 +100,26 @@ end)
 map.nnoremaps("<leader>T", ":TodoTrouble toggle<cr>")
 map.nnoremaps("<leader>e", vim.diagnostic.open_float)
 
+local function diag_next()
+	vim.diagnostic.jump({ count = 1, severity = { min = vim.diagnostic.severity.INFO } })
+end
+
+local function diag_prev()
+	vim.diagnostic.jump({ count = -1, severity = { min = vim.diagnostic.severity.INFO } })
+end
+
 local function diag_error_next()
-	vim.diagnostic.goto_next({ count = 1, severity = vim.diagnostic.severity.ERROR })
+	vim.diagnostic.jump({ count = 1, severity = { min = vim.diagnostic.severity.ERROR } })
 end
 
 local function diag_error_prev()
-	vim.diagnostic.jump({ count = -1, severity = vim.diagnostic.severity.ERROR })
+	vim.diagnostic.jump({ count = -1, severity = { min = vim.diagnostic.severity.ERROR } })
 end
 
-map.nnoremaps("[d", vim.diagnostic.goto_prev)
-map.nnoremaps("]d", vim.diagnostic.goto_next)
+map.nnoremaps("[d", diag_prev)
+map.nnoremaps("]d", diag_next)
+map.nnoremaps("[D", diag_error_prev)
+map.nnoremaps("]D", diag_error_next)
 map.nnoremaps("<leader>q", vim.diagnostic.setloclist)
 
 -- Spectre

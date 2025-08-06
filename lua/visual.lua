@@ -60,6 +60,7 @@ set_hl("InactiveWindow", { bg = "#262626", fg = get_hl("Normal").foreground })
 
 -- LSP
 set_hl("DiagnosticUnderlineWarn", { bg = "#3c2a1f", underline = false, undercurl = false })
+set_hl("DiagnosticUnderlineError", { bg = "#4c1f1f", underline = false, undercurl = false })
 
 local function update_winhighlight(is_active)
 	local hl_group = is_active and "ActiveWindow" or "InactiveWindow"

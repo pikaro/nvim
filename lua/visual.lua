@@ -58,6 +58,9 @@ vim.api.nvim_create_autocmd("ColorScheme", {
 set_hl("ActiveWindow", { bg = "#1c1c1c", fg = get_hl("Normal").foreground })
 set_hl("InactiveWindow", { bg = "#262626", fg = get_hl("Normal").foreground })
 
+-- LSP
+set_hl("DiagnosticUnderlineWarn", { bg = "#3c2a1f", underline = false, undercurl = false })
+
 local function update_winhighlight(is_active)
 	local hl_group = is_active and "ActiveWindow" or "InactiveWindow"
 	vim.api.nvim_win_set_option(0, "winhighlight", "Normal:" .. hl_group .. ",NormalNC:" .. hl_group)

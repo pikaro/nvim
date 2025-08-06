@@ -24,7 +24,7 @@ return {
 	},
 	diagnostics = {
 		severity_sort = true,
-		underline = false,
+		underline = true,
 		virtual_text = {
 			severity = { min = vim.diagnostic.severity.INFO },
 			prefix = "",

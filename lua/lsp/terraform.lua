@@ -12,6 +12,6 @@ return {
 	end,
 	diagnostics = {
 		severity_sort = true,
-		underline = false,
+		underline = true,
 	},
 }

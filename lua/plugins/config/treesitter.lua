@@ -140,6 +140,8 @@ hl("@keyword.assignment.ansible.value", { link = "GruvboxYellow" })
 
 hl("@variable.jinja", { link = "GruvboxYellow" })
 
+hl("@lsp.mod.abstract.cpp", { bold = true, italic = true, fg = gruv.neutral_purple })
+
 return function()
 	require("nvim-treesitter.configs").setup({
 		ensure_installed = {
@@ -156,7 +158,7 @@ return function()
 			"lua",
 			"markdown",
 			"markdown_inline",
-            "nix",
+			"nix",
 			"python",
 			"query",
 			"regex",

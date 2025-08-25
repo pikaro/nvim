@@ -21,8 +21,18 @@ parser_config.plantuml = {
 		requires_generate_from_grammar = true,
 	},
 }
+parser_config.mermaid = {
+	install_info = {
+		url = "https://github.com/monaqa/tree-sitter-mermaid",
+		files = { "src/parser.c" },
+		branch = "main",
+		generate_requires_npm = true,
+		requires_generate_from_grammar = true,
+	},
+}
 vim.treesitter.language.register("jinja", "jinja")
 vim.treesitter.language.register("plantuml", "plantuml")
+vim.treesitter.language.register("mermaid", "mermaid")
 
 local function read_file(path)
 	local file = io.open(path, "r")

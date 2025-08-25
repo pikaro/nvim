@@ -38,6 +38,15 @@ aucmd({ "BufWritePost" }, "*.puml", function()
 	vim.fn.system(command)
 end)
 
+-- FIXME: Install mmdc via nix
+aucmd({ "BufWritePost" }, "*.mmd", function()
+	local filepath = vim.fn.expand("%:p")
+	local outputpath = "/tmp/nvim-mermaid-output.png"
+	-- local configpath = vim.fn.expand("~/.config/nvim/include/plantuml.puml")
+	local command = string.format("mmdc -t dark -b transparent -i %s -o %s &", filepath, outputpath)
+	vim.fn.system(command)
+end)
+
 -- aucmd({ "BufWritePost" }, "*.go", function()
 -- 	vim.cmd("silent! GoCoverage")
 -- end)

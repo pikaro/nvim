@@ -2,6 +2,7 @@ return function()
 	require("CopilotChat").setup({
 		layout = "vertical",
 		clear_chat_on_new_prompt = false,
+		model = "gpt-5",
 		mappings = {
 			-- Conflicts with Kitty navigation
 			-- Not possible to set to nil

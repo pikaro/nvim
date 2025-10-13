@@ -29,11 +29,19 @@ map.noremaps("<leader><leader>", ":noh<cr>")
 map.noremaps("<localleader><localleader>", ":noh<cr>")
 
 -- Kitty navigator - either switch Vim panes if present or switch kitty windows
-for _, fn in pairs({ map.nnoremaps, map.inoremaps, map.snoremaps }) do
-	fn("<C-h>", ":KittyNavigateLeft<cr>")
-	fn("<C-j>", ":KittyNavigateDown<cr>")
-	fn("<C-k>", ":KittyNavigateUp<cr>")
-	fn("<C-l>", ":KittyNavigateRight<cr>")
+for _, fn in pairs({ map.nnoremaps, map.tnoremaps, map.inoremaps, map.snoremaps }) do
+	fn("<C-h>", function()
+		vim.cmd("KittyNavigateLeft")
+	end)
+	fn("<C-j>", function()
+		vim.cmd("KittyNavigateDown")
+	end)
+	fn("<C-k>", function()
+		vim.cmd("KittyNavigateUp")
+	end)
+	fn("<C-l>", function()
+		vim.cmd("KittyNavigateRight")
+	end)
 end
 
 -- Switch between buffers left and with <S-h> and <S-l>
@@ -170,6 +178,18 @@ map.nnoremaps("<leader>hp", function()
 	vim.cmd.Git({ args = { "push" } })
 end)
 
+-- Aider
+
+map.nnoremaps("<leader>a/", "<cmd>Aider toggle<cr>")
+map.nnoremaps("<leader>as", "<cmd>Aider send<cr>")
+map.vnoremaps("<leader>as", "<cmd>Aider send<cr>")
+map.nnoremaps("<leader>ac", "<cmd>Aider command<cr>")
+map.nnoremaps("<leader>ab", "<cmd>Aider buffer<cr>")
+map.nnoremaps("<leader>aa", "<cmd>Aider add<cr>")
+map.nnoremaps("<leader>aA", "<cmd>Aider drop<cr>")
+map.nnoremaps("<leader>ar", "<cmd>Aider add readonly<cr>")
+map.nnoremaps("<leader>aR", "<cmd>Aider reset<cr>")
+
 -- LSP
 
 local lsp_augroup = vim.api.nvim_create_augroup("UserLspConfig", {})
@@ -230,13 +250,10 @@ vim.api.nvim_create_autocmd("BufWritePre", {
 local ft_augroup = vim.api.nvim_create_augroup("UserFileTypeConfig", {})
 
 local ft_maps = {
-	-- Obsolete, leave in as example
-	-- ["arduino"] = {
-	-- 	["<leader>au"] = { { map.nnoremaps }, ":ArduinoUpload<cr>" },
-	-- 	["<leader>av"] = { { map.nnoremaps }, ":ArduinoVerify<cr>" },
-	-- 	["<leader>aa"] = { { map.nnoremaps }, ":ArduinoUploadAndSerial<cr>" },
-	-- 	["<leader>as"] = { { map.nnoremaps }, ":ArduinoSerial<cr>" },
-	-- },
+	["NvimTree"] = {
+		["<leader>aa"] = { { map.nnoremaps }, "<cmd>AiderTreeAddFile<cr>" },
+		["<leader>aA"] = { { map.nnoremaps }, "<cmd>AiderTreeDropFile<cr>" },
+	},
 }
 
 for ft, maps in pairs(ft_maps) do

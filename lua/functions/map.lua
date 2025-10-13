@@ -4,6 +4,10 @@ local nnoremaps = function(lhs, rhs, opts)
 	map("n", lhs, rhs, vim.tbl_extend("force", { noremap = true, silent = true }, opts or {}))
 end
 
+local tnoremaps = function(lhs, rhs, opts)
+	map("t", lhs, rhs, vim.tbl_extend("force", { noremap = true, silent = true }, opts or {}))
+end
+
 local inoremaps = function(lhs, rhs, opts)
 	map("i", lhs, rhs, vim.tbl_extend("force", { noremap = true, silent = true }, opts or {}))
 end
@@ -22,6 +26,7 @@ end
 
 return {
 	nnoremaps = nnoremaps,
+	tnoremaps = tnoremaps,
 	inoremaps = inoremaps,
 	snoremaps = snoremaps,
 	vnoremaps = vnoremaps,

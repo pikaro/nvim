@@ -133,6 +133,14 @@ local plugins = {
 		"nvim-treesitter/nvim-treesitter-context",
 		config = "context",
 	},
+	{
+		"GeorgesAlkhouri/nvim-aider",
+		dependencies = {
+			"folke/snacks.nvim",
+			"nvim-tree/nvim-tree.lua",
+		},
+		config = "aider",
+	},
 }
 
 for _, v in ipairs(plugins) do

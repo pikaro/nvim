@@ -17,6 +17,10 @@ aucmd({ "BufEnter", "FocusGained", "InsertLeave" }, "*", function(event)
 	vim.wo.relativenumber = true
 end)
 
+aucmd("VimResized", "*", function()
+	vim.cmd("tabdo wincmd =")
+end)
+
 aucmd({ "BufLeave", "FocusLost", "InsertEnter" }, "*", function()
 	vim.wo.relativenumber = false
 end)

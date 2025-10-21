@@ -108,9 +108,9 @@ map.vnoremaps("<localleader>S", '"_S')
 
 -- Paste from yank register
 map.nnoremaps("<localleader>p", '"0p')
-map.vnoremaps("<localleader>p", '"0p')
+map.vnoremaps("<localleader>p", '"_d"0P')
 map.nnoremaps("<localleader>P", '"0P')
-map.vnoremaps("<localleader>P", '"0P')
+map.vnoremaps("<localleader>P", '"_d"0P')
 
 -- nvim-tree
 local function tree_focus_or_toggle()

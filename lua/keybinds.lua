@@ -90,9 +90,27 @@ map.noremaps("g#", "<Plug>(asterisk-gz#)")
 map.nnoremaps("{", "<Cmd>keepjumps normal! {<CR>")
 map.nnoremaps("}", "<Cmd>keepjumps normal! }<CR>")
 
--- Delete without yanking
-map.vnoremaps("<leader>d", '"_d')
-map.nnoremaps("<leader>d", '"_d')
+-- Delete without yanking to default register
+map.vnoremaps("<localleader>d", '"_d')
+map.nnoremaps("<localleader>d", '"_d')
+map.vnoremaps("<localleader>x", '"_x')
+map.nnoremaps("<localleader>x", '"_x')
+map.nnoremaps("<localleader>c", '"_c')
+map.vnoremaps("<localleader>c", '"_c')
+map.nnoremaps("<localleader>C", '"_C')
+map.vnoremaps("<localleader>C", '"_C')
+map.nnoremaps("<localleader>X", '"_X')
+map.vnoremaps("<localleader>X", '"_X')
+map.nnoremaps("<localleader>s", '"_s')
+map.vnoremaps("<localleader>s", '"_s')
+map.nnoremaps("<localleader>S", '"_S')
+map.vnoremaps("<localleader>S", '"_S')
+
+-- Paste from yank register
+map.nnoremaps("<localleader>p", '"0p')
+map.vnoremaps("<localleader>p", '"0p')
+map.nnoremaps("<localleader>P", '"0P')
+map.vnoremaps("<localleader>P", '"0P')
 
 -- nvim-tree
 local function tree_focus_or_toggle()

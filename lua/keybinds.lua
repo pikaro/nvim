@@ -90,6 +90,10 @@ map.noremaps("g#", "<Plug>(asterisk-gz#)")
 map.nnoremaps("{", "<Cmd>keepjumps normal! {<CR>")
 map.nnoremaps("}", "<Cmd>keepjumps normal! }<CR>")
 
+-- Delete without yanking
+map.vnoremaps("<leader>d", '"_d')
+map.nnoremaps("<leader>d", '"_d')
+
 -- nvim-tree
 local function tree_focus_or_toggle()
 	local api = require("nvim-tree.api").tree

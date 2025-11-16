@@ -66,6 +66,9 @@ end)
 map.nnoremaps("<C-o>", function()
 	require("telescope.builtin").live_grep()
 end)
+map.nnoremaps("<C-n>", function()
+	require("telescope").extensions.notify.notify()
+end)
 
 -- Doge
 map.nnoremaps("<leader>b", "<Plug>(doge-generate)")

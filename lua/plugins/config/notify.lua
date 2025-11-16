@@ -1,8 +1,8 @@
 return function()
 	require("notify").setup({
-		stages = "static",
-		timeout = 3000,
-		animate = false,
-		render = "compact",
+		timeout = 1000,
+		stages = "fade",
+		render = "wrapped-compact",
 	})
+	require("telescope").load_extension("notify")
 end

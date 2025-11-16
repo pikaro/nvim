@@ -60,15 +60,86 @@ map.nnoremaps("-", ":split<cr>")
 map.nnoremaps("|", ":vsplit<cr>")
 
 -- Telescope
-map.nnoremaps("<C-p>", function()
-	require("telescope.builtin").find_files({ hidden = true })
-end)
+local function telescope_extra()
+	local f = io.open(".telescope_extra", "r")
+	if not f then
+		return nil
+	end
+
+	local paths = {}
+	for line in f:lines() do
+		-- trim whitespace
+		line = line:match("^%s*(.-)%s*$")
+		if line ~= "" then
+			table.insert(paths, line)
+		end
+	end
+	f:close()
+
+	if #paths == 0 then
+		return nil
+	end
+
+	local opts = {}
+
+	opts.search_dirs = vim.list_extend({ "." }, paths)
+
+	return opts
+end
+
+local function live_grep_with_extra()
+	require("telescope.builtin").live_grep(telescope_extra() or {})
+end
+local function find_files_with_extra()
+	require("telescope.builtin").find_files(telescope_extra() or {})
+end
+
 map.nnoremaps("<C-o>", function()
-	require("telescope.builtin").live_grep()
+	live_grep_with_extra()
 end)
+map.nnoremaps("<C-p>", function()
+	find_files_with_extra()
+end)
+
 map.nnoremaps("<C-n>", function()
 	require("telescope").extensions.notify.notify()
 end)
+
+local function from_project_git_root()
+	local function is_git_repo()
+		vim.fn.system("git rev-parse --is-inside-work-tree")
+
+		return vim.v.shell_error == 0
+	end
+
+	local function get_git_root()
+		local dot_git_path = vim.fn.finddir(".git", ".;")
+		return vim.fn.fnamemodify(dot_git_path, ":h")
+	end
+
+	local opts = {}
+
+	if is_git_repo() then
+		opts = {
+			cwd = get_git_root(),
+		}
+	end
+
+	return opts
+end
+
+local function live_grep_from_project_git_root()
+	local opts = from_project_git_root()
+	require("telescope.builtin").live_grep(opts)
+end
+
+local function find_files_from_project_git_root()
+	local opts = from_project_git_root()
+	require("telescope.builtin").find_files(opts)
+end
+
+map.nnoremaps("<leader>o", live_grep_from_project_git_root)
+map.nnoremaps("<leader>p", find_files_from_project_git_root)
 
 -- Doge
 map.nnoremaps("<leader>b", "<Plug>(doge-generate)")

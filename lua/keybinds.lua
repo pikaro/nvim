@@ -1,7 +1,8 @@
 local map = require("functions/map")
 
--- Jump to last in stack
-map.nnoremaps("<leader>o", "<C-o>")
+-- Jump in stack
+map.nnoremaps("<leader>[", "<C-o>")
+map.nnoremaps("<leader>]", "<C-i>")
 
 -- Write all buffers
 -- TODO: This makes all the modified buffers pop up quickly, how to fix?

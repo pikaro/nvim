@@ -28,6 +28,7 @@ for _, language in ipairs(languages) do
 		local lsp = config.lsp
 		local cmd = config.cmd
 		local init_options = config.init_options
+		local on_new_config = config.on_new_config
 		local diagnostics = vim.tbl_extend("force", default_config, config.diagnostics or {})
 		local filetypes = config.filetypes or { language }
 		local settings = config.settings or {}
@@ -48,6 +49,7 @@ for _, language in ipairs(languages) do
 		local options = {
 			cmd = cmd,
 			init_options = init_options,
+			on_new_config = on_new_config,
 			on_attach = on_attach,
 			filetypes = filetypes,
 			capabilities = lsp_capabilities,
@@ -56,7 +58,10 @@ for _, language in ipairs(languages) do
 			diagnostics = config.diagnostics,
 			handlers = handlers,
 		}
-		lsp.setup(vim.tbl_extend("force", options, config.options or {}))
+		options = vim.tbl_extend("force", options, config.options or {})
+
+		vim.lsp.config(lsp, options)
+        vim.lsp.enable(lsp)
 	end
 end
 

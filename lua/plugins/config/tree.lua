@@ -281,6 +281,7 @@ return function()
 				},
 			},
 			open_file = {
+				relative_path = false,
 				quit_on_open = false,
 				eject = true,
 				resize_window = true,
@@ -320,13 +321,6 @@ return function()
 				remove = true,
 				trash = true,
 				default_yes = false,
-			},
-		},
-		experimental = {
-			actions = {
-				open_file = {
-					relative_path = false,
-				},
 			},
 		},
 		log = {

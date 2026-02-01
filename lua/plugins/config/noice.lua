@@ -11,6 +11,10 @@ return function()
 				["cmp.entry.get_documentation"] = true,
 			},
 		},
+		messages = {
+			enabled = true,
+			view = "notify",
+		},
 		routes = {
 			{
 				filter = {

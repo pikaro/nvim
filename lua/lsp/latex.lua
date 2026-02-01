@@ -1,7 +1,5 @@
-local lspconfig = require("lspconfig")
-
 return {
-	lsp = lspconfig.texlab,
+	lsp = "texlab",
 	filetypes = { "tex", "plaintex", "bib" },
 	settings = {
 		texlab = {

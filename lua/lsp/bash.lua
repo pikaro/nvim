@@ -1,6 +1,4 @@
-local lspconfig = require("lspconfig")
-
 return {
-	lsp = lspconfig.bashls,
+	lsp = "bashls",
 	filetypes = { "bash", "sh" },
 }

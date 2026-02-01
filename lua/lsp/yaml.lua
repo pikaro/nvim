@@ -1,6 +1,4 @@
-local lspconfig = require("lspconfig")
-
 return {
-	lsp = lspconfig.yamlls,
+	lsp = "yamlls",
 	filetypes = { "yaml", "yaml.*" },
 }

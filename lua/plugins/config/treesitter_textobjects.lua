@@ -1,5 +1,5 @@
 return function()
-	require("nvim-treesitter.configs").setup({
+	require("nvim-treesitter.config").setup({
 		textobjects = {
 			select = {
 				enable = true,

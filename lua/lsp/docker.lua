@@ -1,6 +1,4 @@
-local lspconfig = require("lspconfig")
-
 return {
-	lsp = lspconfig.dockerls,
+	lsp = "dockerls",
 	filetypes = { "dockerfile" },
 }

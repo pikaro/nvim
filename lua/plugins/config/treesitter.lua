@@ -2,8 +2,8 @@ local query = require("vim.treesitter.query")
 query.add_directive("vim-match-offset!", require("treesitter.directives.vim_match_offset"), { all = true })
 
 local parsers = require("nvim-treesitter.parsers")
-local parser_config = parsers.get_parser_configs()
-parser_config.jinja = {
+
+parsers.jinja = {
 	install_info = {
 		url = "https://github.com/dbt-labs/tree-sitter-jinja2",
 		files = { "src/parser.c" },
@@ -12,7 +12,7 @@ parser_config.jinja = {
 		requires_generate_from_grammar = true,
 	},
 }
-parser_config.plantuml = {
+parsers.plantuml = {
 	install_info = {
 		url = "https://github.com/lyndsysimon/tree-sitter-plantuml",
 		files = { "src/parser.c" },
@@ -21,8 +21,19 @@ parser_config.plantuml = {
 		requires_generate_from_grammar = true,
 	},
 }
+parsers.mermaid = {
+	install_info = {
+		url = "https://github.com/monaqa/tree-sitter-mermaid",
+		files = { "src/parser.c" },
+		branch = "main",
+		generate_requires_npm = true,
+		requires_generate_from_grammar = true,
+	},
+}
+
 vim.treesitter.language.register("jinja", "jinja")
 vim.treesitter.language.register("plantuml", "plantuml")
+vim.treesitter.language.register("mermaid", "mermaid")
 
 local function read_file(path)
 	local file = io.open(path, "r")
@@ -140,32 +151,10 @@ hl("@keyword.assignment.ansible.value", { link = "GruvboxYellow" })
 
 hl("@variable.jinja", { link = "GruvboxYellow" })
 
+hl("@lsp.mod.abstract.cpp", { bold = true, italic = true, fg = gruv.neutral_purple })
+
 return function()
-	require("nvim-treesitter.configs").setup({
-		ensure_installed = {
-			"arduino",
-			"bash",
-			"c",
-			"cpp",
-			"dockerfile",
-			"go",
-			"hcl",
-			"hcl",
-			"javascript",
-			"json",
-			"lua",
-			"markdown",
-			"markdown_inline",
-            "nix",
-			"python",
-			"query",
-			"regex",
-			"scheme",
-			"terraform",
-			"vim",
-			"vimdoc",
-			"yaml",
-		},
+	require("nvim-treesitter.config").setup({
 
 		-- Install parsers synchronously
 		sync_install = false,
@@ -193,4 +182,36 @@ return function()
 			enable = true,
 		},
 	})
+
+	local ensure_installed = {
+		"arduino",
+		"bash",
+		"c",
+		"cpp",
+		"dockerfile",
+		"go",
+		"hcl",
+		"hcl",
+		"javascript",
+		"json",
+		"lua",
+		"markdown",
+		"markdown_inline",
+		"nix",
+		"python",
+		"query",
+		"regex",
+		"scheme",
+		"terraform",
+		"vim",
+		"vimdoc",
+		"yaml",
+	}
+	local already_installed = require("nvim-treesitter.config").get_installed()
+	local parsers_to_install = vim.iter(ensure_installed)
+		:filter(function(parser)
+			return not vim.tbl_contains(already_installed, parser)
+		end)
+		:totable()
+	require("nvim-treesitter").install(parsers_to_install)
 end

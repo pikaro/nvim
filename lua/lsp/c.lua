@@ -1,29 +1,25 @@
 local lspconfig = require("lspconfig")
 
 return {
-	lsp = lspconfig.clangd,
+	lsp = "clangd",
 
-	cmd = {
-		-- WARNING: Need custom-compiled clangd
-		--          git clone https://github.com/espressif/llvm-project.git
-		--          cd llvm-project
-		--          cmake -S llvm -B build -G Ninja -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra"
-		--          cmake --build build
-		"/Users/david.reis/src/misc/llvm-project/build/bin/clangd",
-		-- WARNING: Need platformio toolchain
-		--          pio project init --board arduino_nano_esp32 --ide vim
-		"--query-driver=/Users/david.reis/.platformio/packages/toolchain-xtensa-esp32s3/bin/xtensa-esp32s3-elf-gcc*,/Users/david.reis/.platformio/packages/toolchain-xtensa-esp32s3/bin/xtensa-esp32s3-elf-g++*,xtensa-esp32s3-elf-gcc*,xtensa-esp32s3-elf-g++*",
-		"--background-index",
-		"--suggest-missing-includes",
-		"--clang-tidy",
-		"--header-insertion=iwyu",
-		"--header-insertion-decorators",
-		"--cross-file-rename",
-		"--compile-commands-dir=build",
-		"--pch-storage=memory",
-		"--completion-style=detailed",
-		"--log=verbose",
-	},
+	cmd = function(dispatchers, config)
+		local uv = vim.uv or vim.loop
+		local join = vim.fs.joinpath
+
+		local root = assert(config.root_dir or uv.cwd(), "no root_dir computed")
+
+		local local_bin = join(root, "bin", "clangd")
+		local mason_bin = vim.fn.stdpath("data") .. "/mason/bin/clangd"
+		local exe = (uv.fs_stat(local_bin) and local_bin) or mason_bin
+		assert(uv.fs_stat(exe), "clangd not found: " .. exe)
+
+		local argv = { exe, "--compile-commands-dir=" .. root }
+
+		local extra = { cwd = root }
+
+		return vim.lsp.rpc.start(argv, dispatchers, extra)
+	end,
 
 	options = {
 		single_file_support = true,

@@ -1,7 +1,7 @@
-local lspconfig = require("lspconfig")
+local markdownlint_config = require("efmls-configs.linters.markdownlint")
 
 return {
-	lsp = lspconfig.efm,
+	lsp = "efm",
 	init_options = { documentFormatting = true },
 	filetypes = { "lua", "dockerfile", "markdown", "go" },
 	settings = {
@@ -10,7 +10,9 @@ return {
 			lua = { require("efmls-configs.formatters.stylua") },
 			dockerfile = { require("efmls-configs.linters.hadolint") },
 			markdown = {
-				require("efmls-configs.linters.markdownlint"),
+				vim.tbl_extend("force", markdownlint_config, {
+					lintCommand = markdownlint_config.lintCommand .. " --config ~/.markdownlint.yml",
+				}),
 				require("efmls-configs.formatters.mdformat"),
 			},
 			go = {

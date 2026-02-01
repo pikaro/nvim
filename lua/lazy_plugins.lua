@@ -1,5 +1,9 @@
 local plugins = {
-	{ "ellisonleao/gruvbox.nvim", lazy = false, config = "gruvbox" },
+	{
+		"ellisonleao/gruvbox.nvim",
+		lazy = false,
+		config = "gruvbox",
+	},
 	"Afourcat/treesitter-terraform-doc.nvim",
 	"haya14busa/vim-asterisk",
 	"hrsh7th/cmp-buffer",
@@ -22,20 +26,30 @@ local plugins = {
 	"tpope/vim-fugitive",
 	"lukas-reineke/cmp-under-comparator",
 	{ "towolf/vim-helm", ft = "helm" },
-	-- Temp replacement for hrsh7th/nvim-cmp with cmp window above line for Copilot
 	{ "hrsh7th/cmp-nvim-lsp", dependencies = { "neovim/nvim-lspconfig" } },
 	{ "knubie/vim-kitty-navigator" },
-	{ "romgrk/barbar.nvim", dependencies = { "lewis6991/gitsigns.nvim", "nvim-tree/nvim-web-devicons" } },
+	{
+		"romgrk/barbar.nvim",
+		dependencies = { "lewis6991/gitsigns.nvim", "nvim-tree/nvim-web-devicons" },
+	},
 	{ "tzachar/cmp-ai", dependencies = { "nvim-lua/plenary.nvim" } },
 	{ "williamboman/mason.nvim", config = "mason" },
-	-- { "L3MON4D3/LuaSnip", config = "luasnip" },
 	{ "nvim-treesitter/nvim-treesitter", config = "treesitter" },
 	{ "rcarriga/nvim-notify", config = "notify" },
 	{ "dense-analysis/ale", config = "ale" },
-	{ "zbirenbaum/copilot.lua", config = "copilot" },
+	{
+		"zbirenbaum/copilot.lua",
+		config = "copilot",
+		-- requires = { "copilotlsp-nvim/copilot-lsp" }, -- NES is annoying
+	},
+	-- { "copilotlsp-nvim/copilot-lsp", config = "copilot_lsp" },
 	{ "kkoomen/vim-doge", build = ":call doge#install()" },
-	{ "https://gitlab.com/HiPhish/rainbow-delimiters.nvim", config = "rainbow_delimiters" },
-	{ "williamboman/mason-lspconfig.nvim", config = "mason_lspconfig", dependencies = { "williamboman/mason.nvim" } },
+	{ "HiPhish/rainbow-delimiters.nvim", config = "rainbow_delimiters", submodules = false },
+	{
+		"williamboman/mason-lspconfig.nvim",
+		config = "mason_lspconfig",
+		dependencies = { "williamboman/mason.nvim" },
+	},
 	{
 		"nvim-lualine/lualine.nvim",
 		dependencies = { "ryanoasis/vim-devicons", "nvim-tree/nvim-web-devicons", "nvim-lua/lsp-status.nvim" },
@@ -133,6 +147,14 @@ local plugins = {
 		"nvim-treesitter/nvim-treesitter-context",
 		config = "context",
 	},
+	-- {
+	-- 	"GeorgesAlkhouri/nvim-aider",
+	-- 	dependencies = {
+	-- 		"folke/snacks.nvim",
+	-- 		"nvim-tree/nvim-tree.lua",
+	-- 	},
+	-- 	config = "aider",
+	-- },
 }
 
 for _, v in ipairs(plugins) do
@@ -154,15 +176,21 @@ for _, v in ipairs(plugins) do
 	end
 end
 
-vim.fn.system({
-	"git",
-	"clone",
-	"--depth=1",
-	"--filter=blob:none",
-	"https://github.com/folke/lazy.nvim.git",
-	"--branch=stable",
-	vim.fn.stdpath("data") .. "/lazy/lazy.nvim",
-})
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not (vim.uv or vim.loop).fs_stat(lazypath) then
+	local lazyrepo = "https://github.com/folke/lazy.nvim.git"
+	local out = vim.fn.system({ "git", "clone", "--filter=blob:none", "--branch=stable", lazyrepo, lazypath })
+	if vim.v.shell_error ~= 0 then
+		vim.api.nvim_echo({
+			{ "Failed to clone lazy.nvim:\n", "ErrorMsg" },
+			{ out, "WarningMsg" },
+			{ "\nPress any key to exit..." },
+		}, true, {})
+		vim.fn.getchar()
+		os.exit(1)
+	end
+end
+vim.opt.rtp:prepend(lazypath)
 
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1

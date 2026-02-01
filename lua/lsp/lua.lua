@@ -1,7 +1,5 @@
-local lspconfig = require("lspconfig")
-
 return {
-	lsp = lspconfig.lua_ls,
+	lsp = "lua_ls",
 	filetypes = { "lua" },
 	settings = {
 		Lua = {
@@ -12,6 +10,12 @@ return {
 					"?/init.lua",
 				},
 			},
+			hint = {
+				enable = true,
+				paramName = "All",
+				paramType = true,
+				arrayIndex = "Disable",
+			},
 			workspace = {
 				library = {
 					vim.env.VIMRUNTIME,
@@ -19,6 +23,9 @@ return {
 				},
 			},
 			format = {
+				enable = false,
+			},
+			telemetry = {
 				enable = false,
 			},
 		},

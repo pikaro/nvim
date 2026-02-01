@@ -1,7 +1,8 @@
 local map = require("functions/map")
 
--- Jump to last in stack
-map.nnoremaps("<leader>o", "<C-o>")
+-- Jump in stack
+map.nnoremaps("<leader>[", "<C-o>")
+map.nnoremaps("<leader>]", "<C-i>")
 
 -- Write all buffers
 -- TODO: This makes all the modified buffers pop up quickly, how to fix?
@@ -29,11 +30,19 @@ map.noremaps("<leader><leader>", ":noh<cr>")
 map.noremaps("<localleader><localleader>", ":noh<cr>")
 
 -- Kitty navigator - either switch Vim panes if present or switch kitty windows
-for _, fn in pairs({ map.nnoremaps, map.inoremaps, map.snoremaps }) do
-	fn("<C-h>", ":KittyNavigateLeft<cr>")
-	fn("<C-j>", ":KittyNavigateDown<cr>")
-	fn("<C-k>", ":KittyNavigateUp<cr>")
-	fn("<C-l>", ":KittyNavigateRight<cr>")
+for _, fn in pairs({ map.nnoremaps, map.tnoremaps, map.inoremaps, map.snoremaps }) do
+	fn("<C-h>", function()
+		vim.cmd("KittyNavigateLeft")
+	end)
+	fn("<C-j>", function()
+		vim.cmd("KittyNavigateDown")
+	end)
+	fn("<C-k>", function()
+		vim.cmd("KittyNavigateUp")
+	end)
+	fn("<C-l>", function()
+		vim.cmd("KittyNavigateRight")
+	end)
 end
 
 -- Switch between buffers left and with <S-h> and <S-l>
@@ -52,12 +61,95 @@ map.nnoremaps("-", ":split<cr>")
 map.nnoremaps("|", ":vsplit<cr>")
 
 -- Telescope
-map.nnoremaps("<C-p>", function()
-	require("telescope.builtin").find_files({ hidden = true })
-end)
+local function telescope_extra()
+	local f = io.open(".telescope_extra", "r")
+	if not f then
+		return nil
+	end
+
+	local paths = {}
+	for line in f:lines() do
+		-- trim whitespace
+		line = line:match("^%s*(.-)%s*$")
+		if line ~= "" then
+			table.insert(paths, line)
+		end
+	end
+	f:close()
+
+	if #paths == 0 then
+		return nil
+	end
+
+	local opts = {}
+
+	opts.search_dirs = vim.list_extend({ "." }, paths)
+
+	return opts
+end
+
+local function live_grep_with_extra(opts)
+	local extra = telescope_extra() or {}
+	require("telescope.builtin").live_grep(vim.tbl_extend("force", extra, opts or {}))
+end
+local function find_files_with_extra(opts)
+	local extra = telescope_extra() or {}
+	require("telescope.builtin").find_files(vim.tbl_extend("force", extra, opts or {}))
+end
+
 map.nnoremaps("<C-o>", function()
-	require("telescope.builtin").live_grep()
+	live_grep_with_extra()
 end)
+map.nnoremaps("<C-p>", function()
+	find_files_with_extra()
+end)
+
+map.nnoremaps("<leader>O", function()
+	live_grep_with_extra({ hidden = true })
+end)
+map.nnoremaps("<leader>P", function()
+	find_files_with_extra({ hidden = true })
+end)
+
+map.nnoremaps("<C-n>", function()
+	require("telescope").extensions.notify.notify()
+end)
+
+local function from_project_git_root()
+	local function is_git_repo()
+		vim.fn.system("git rev-parse --is-inside-work-tree")
+
+		return vim.v.shell_error == 0
+	end
+
+	local function get_git_root()
+		local dot_git_path = vim.fn.finddir(".git", ".;")
+		return vim.fn.fnamemodify(dot_git_path, ":h")
+	end
+
+	local opts = {}
+
+	if is_git_repo() then
+		opts = {
+			cwd = get_git_root(),
+		}
+	end
+
+	return opts
+end
+
+local function live_grep_from_project_git_root()
+	local opts = from_project_git_root()
+	require("telescope.builtin").live_grep(opts)
+end
+
+local function find_files_from_project_git_root()
+	local opts = from_project_git_root()
+	require("telescope.builtin").find_files(opts)
+end
+
+map.nnoremaps("<leader>o", live_grep_from_project_git_root)
+map.nnoremaps("<leader>p", find_files_from_project_git_root)
 
 -- Doge
 map.nnoremaps("<leader>b", "<Plug>(doge-generate)")
@@ -82,11 +174,32 @@ map.noremaps("g#", "<Plug>(asterisk-gz#)")
 map.nnoremaps("{", "<Cmd>keepjumps normal! {<CR>")
 map.nnoremaps("}", "<Cmd>keepjumps normal! }<CR>")
 
+-- Delete without yanking to default register
+map.vnoremaps("<localleader>d", '"_d')
+map.nnoremaps("<localleader>d", '"_d')
+map.vnoremaps("<localleader>x", '"_x')
+map.nnoremaps("<localleader>x", '"_x')
+map.nnoremaps("<localleader>c", '"_c')
+map.vnoremaps("<localleader>c", '"_c')
+map.nnoremaps("<localleader>C", '"_C')
+map.vnoremaps("<localleader>C", '"_C')
+map.nnoremaps("<localleader>X", '"_X')
+map.vnoremaps("<localleader>X", '"_X')
+map.nnoremaps("<localleader>s", '"_s')
+map.vnoremaps("<localleader>s", '"_s')
+map.nnoremaps("<localleader>S", '"_S')
+map.vnoremaps("<localleader>S", '"_S')
+
+-- Paste from yank register
+map.nnoremaps("<localleader>p", '"0p')
+map.vnoremaps("<localleader>p", '"_d"0P')
+map.nnoremaps("<localleader>P", '"0P')
+map.vnoremaps("<localleader>P", '"_d"0P')
+
 -- nvim-tree
 local function tree_focus_or_toggle()
 	local api = require("nvim-tree.api").tree
-	local view = require("nvim-tree.view")
-	if view.is_visible() then
+	if api.is_visible() then
 		api.focus()
 	else
 		api.toggle()
@@ -96,21 +209,31 @@ map.nnoremaps("<C-t>", tree_focus_or_toggle)
 
 -- LSP
 map.nnoremaps("<leader>t", function()
-	require("trouble").toggle("diagnostics")
+	require("trouble").toggle("cascade")
 end)
 map.nnoremaps("<leader>T", ":TodoTrouble toggle<cr>")
 map.nnoremaps("<leader>e", vim.diagnostic.open_float)
 
+local function diag_next()
+	vim.diagnostic.jump({ count = 1, severity = { min = vim.diagnostic.severity.INFO } })
+end
+
+local function diag_prev()
+	vim.diagnostic.jump({ count = -1, severity = { min = vim.diagnostic.severity.INFO } })
+end
+
 local function diag_error_next()
-	vim.diagnostic.goto_next({ count = 1, severity = vim.diagnostic.severity.ERROR })
+	vim.diagnostic.jump({ count = 1, severity = { min = vim.diagnostic.severity.ERROR } })
 end
 
 local function diag_error_prev()
-	vim.diagnostic.jump({ count = -1, severity = vim.diagnostic.severity.ERROR })
+	vim.diagnostic.jump({ count = -1, severity = { min = vim.diagnostic.severity.ERROR } })
 end
 
-map.nnoremaps("[d", vim.diagnostic.goto_prev)
-map.nnoremaps("]d", vim.diagnostic.goto_next)
+map.nnoremaps("[d", diag_prev)
+map.nnoremaps("]d", diag_next)
+map.nnoremaps("[D", diag_error_prev)
+map.nnoremaps("]D", diag_error_next)
 map.nnoremaps("<leader>q", vim.diagnostic.setloclist)
 
 -- Spectre
@@ -161,6 +284,18 @@ map.nnoremaps("<leader>hp", function()
 	vim.cmd.Git({ args = { "push" } })
 end)
 
+-- Aider
+
+map.nnoremaps("<leader>a/", "<cmd>Aider toggle<cr>")
+map.nnoremaps("<leader>as", "<cmd>Aider send<cr>")
+map.vnoremaps("<leader>as", "<cmd>Aider send<cr>")
+map.nnoremaps("<leader>ac", "<cmd>Aider command<cr>")
+map.nnoremaps("<leader>ab", "<cmd>Aider buffer<cr>")
+map.nnoremaps("<leader>aa", "<cmd>Aider add<cr>")
+map.nnoremaps("<leader>aA", "<cmd>Aider drop<cr>")
+map.nnoremaps("<leader>ar", "<cmd>Aider add readonly<cr>")
+map.nnoremaps("<leader>aR", "<cmd>Aider reset<cr>")
+
 -- LSP
 
 local lsp_augroup = vim.api.nvim_create_augroup("UserLspConfig", {})
@@ -208,7 +343,7 @@ vim.api.nvim_create_autocmd("BufWritePre", {
 	callback = function()
 		local clients = vim.lsp.get_clients({ bufnr = 0 })
 		for _, client in ipairs(clients) do
-			if client and client.supports_method("textDocument/formatting") then
+			if client and client:supports_method("textDocument/formatting") then
 				vim.lsp.buf.format()
 				return
 			end
@@ -221,13 +356,10 @@ vim.api.nvim_create_autocmd("BufWritePre", {
 local ft_augroup = vim.api.nvim_create_augroup("UserFileTypeConfig", {})
 
 local ft_maps = {
-	-- Obsolete, leave in as example
-	-- ["arduino"] = {
-	-- 	["<leader>au"] = { { map.nnoremaps }, ":ArduinoUpload<cr>" },
-	-- 	["<leader>av"] = { { map.nnoremaps }, ":ArduinoVerify<cr>" },
-	-- 	["<leader>aa"] = { { map.nnoremaps }, ":ArduinoUploadAndSerial<cr>" },
-	-- 	["<leader>as"] = { { map.nnoremaps }, ":ArduinoSerial<cr>" },
-	-- },
+	["NvimTree"] = {
+		["<leader>aa"] = { { map.nnoremaps }, "<cmd>AiderTreeAddFile<cr>" },
+		["<leader>aA"] = { { map.nnoremaps }, "<cmd>AiderTreeDropFile<cr>" },
+	},
 }
 
 for ft, maps in pairs(ft_maps) do

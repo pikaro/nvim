@@ -1,5 +1,3 @@
-local lspconfig = require("lspconfig")
-
 local downgrade = {
 	["UnusedImport"] = vim.diagnostic.severity.WARN,
 	["UnusedVar"] = vim.diagnostic.severity.WARN,
@@ -26,7 +24,7 @@ local filter_handler = function(err, result, ctx, config)
 end
 
 return {
-	lsp = lspconfig.gopls,
+	lsp = "gopls",
 	filetypes = { "go", "gomod", "gowork", "gotmpl" },
 	settings = {
 		gopls = {

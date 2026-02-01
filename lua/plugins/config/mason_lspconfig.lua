@@ -3,7 +3,8 @@ return function()
 		ensure_installed = {
 			"ansiblels",
 			"bashls",
-			-- "clangd",
+			-- "clangd", -- use custom built one
+			-- "copilot", -- redundant with copilot.nvim
 			"cssls",
 			"docker_compose_language_service",
 			"dockerls",
@@ -22,9 +23,11 @@ return function()
 			"rust_analyzer",
 			"terraformls",
 			"texlab",
+			"tofu_ls",
 			"ts_ls",
 			"yamlls",
 		},
 		automatic_installation = true,
+		automatic_enable = false,
 	})
 end

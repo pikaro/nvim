@@ -1,7 +1,5 @@
-local lspconfig = require("lspconfig")
-
 return {
-	lsp = lspconfig.helm_ls,
+	lsp = "helm_ls",
 	filetypes = { "helm" },
 	settings = {
 		["helm-ls"] = {

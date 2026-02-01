@@ -1,7 +1,5 @@
-local lspconfig = require("lspconfig")
-
 return {
-	lsp = lspconfig.terraformls,
+	lsp = "tofu_ls",
 	filetypes = { "terraform", "terraform-vars", "terraform-test" },
 	options = {
 		single_file_support = false,

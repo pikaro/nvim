@@ -11,6 +11,7 @@ o.history = 500
 --  Set to auto read when a file is changed from the outside
 o.autoread = true
 
+-- WARNING: Must be set BEFORE Lazy / plugins are loaded
 vim.g.mapleader = "\\"
 vim.g.maplocalleader = vim.api.nvim_replace_termcodes("<BS>", true, true, true)
 

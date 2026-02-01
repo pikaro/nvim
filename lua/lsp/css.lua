@@ -1,7 +1,5 @@
-local lspconfig = require("lspconfig")
-
 return {
-	lsp = lspconfig.cssls,
+	lsp = "cssls",
 	filetypes = { "css", "scss", "less" },
 	settings = {
 		css = {

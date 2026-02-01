@@ -1,8 +1,7 @@
-local lspconfig = require("lspconfig")
 local markdownlint_config = require("efmls-configs.linters.markdownlint")
 
 return {
-	lsp = lspconfig.efm,
+	lsp = "efm",
 	init_options = { documentFormatting = true },
 	filetypes = { "lua", "dockerfile", "markdown", "go" },
 	settings = {

@@ -88,11 +88,13 @@ local function telescope_extra()
 	return opts
 end
 
-local function live_grep_with_extra()
-	require("telescope.builtin").live_grep(telescope_extra() or {})
+local function live_grep_with_extra(opts)
+	local extra = telescope_extra() or {}
+	require("telescope.builtin").live_grep(vim.tbl_extend("force", extra, opts or {}))
 end
-local function find_files_with_extra()
-	require("telescope.builtin").find_files(telescope_extra() or {})
+local function find_files_with_extra(opts)
+	local extra = telescope_extra() or {}
+	require("telescope.builtin").find_files(vim.tbl_extend("force", extra, opts or {}))
 end
 
 map.nnoremaps("<C-o>", function()
@@ -100,6 +102,13 @@ map.nnoremaps("<C-o>", function()
 end)
 map.nnoremaps("<C-p>", function()
 	find_files_with_extra()
+end)
+
+map.nnoremaps("<leader>O", function()
+	live_grep_with_extra({ hidden = true })
+end)
+map.nnoremaps("<leader>P", function()
+	find_files_with_extra({ hidden = true })
 end)
 
 map.nnoremaps("<C-n>", function()
@@ -334,7 +343,7 @@ vim.api.nvim_create_autocmd("BufWritePre", {
 	callback = function()
 		local clients = vim.lsp.get_clients({ bufnr = 0 })
 		for _, client in ipairs(clients) do
-			if client and client.supports_method("textDocument/formatting") then
+			if client and client:supports_method("textDocument/formatting") then
 				vim.lsp.buf.format()
 				return
 			end

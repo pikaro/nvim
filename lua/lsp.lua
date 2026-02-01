@@ -58,7 +58,10 @@ for _, language in ipairs(languages) do
 			diagnostics = config.diagnostics,
 			handlers = handlers,
 		}
-		lsp.setup(vim.tbl_extend("force", options, config.options or {}))
+		options = vim.tbl_extend("force", options, config.options or {})
+
+		vim.lsp.config(lsp, options)
+        vim.lsp.enable(lsp)
 	end
 end
 

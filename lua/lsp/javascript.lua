@@ -1,7 +1,7 @@
 local lspconfig = require("lspconfig")
 
 return {
-	lsp = lspconfig.ts_ls,
+	lsp = "ts_ls",
 	filetypes = {
 		"javascript",
 		"javascriptreact",

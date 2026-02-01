@@ -1,7 +1,7 @@
 local lspconfig = require("lspconfig")
 
 return {
-	lsp = lspconfig.clangd,
+	lsp = "clangd",
 
 	cmd = function(dispatchers, config)
 		local uv = vim.uv or vim.loop

@@ -29,6 +29,7 @@ o.wildmenu = true
 
 -- Open splits to the right
 o.splitright = true
+o.splitbelow = true
 
 --  Ignore compiled files
 local separator = vim.fn.has("win32") and "\\" or "/"

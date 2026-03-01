@@ -11,6 +11,10 @@ return function()
 		numhl = true,
 		-- Causes issues with diagnostics from LSP
 		current_line_blame = false,
+		diffthis = {
+			vertical = true,
+			split = "left",
+		},
 		on_attach = function(bufnr)
 			local gs = package.loaded.gitsigns
 			local function map(mode, l, r, opts)
@@ -27,7 +31,14 @@ return function()
 			map("n", "=s", gs.stage_hunk)
 			map("n", "=r", gs.reset_hunk)
 			map("n", "=R", gs.reset_buffer)
-			map("n", "=v", gs.preview_hunk)
+			map("n", "==", gs.preview_hunk)
+			map("n", "=v", gs.preview_hunk_inline)
+			map("n", "=t", function()
+				-- local bufs = vim.tbl_filter(function(b)
+				-- 	return vim.api.nvim_buf_get_option(b, "filetype") ~= "git"
+				-- end, vim.api.nvim_list_bufs())
+				gs.setqflist("all")
+			end)
 			map("n", "[h", gs.prev_hunk)
 			map("n", "]h", gs.next_hunk)
 		end,

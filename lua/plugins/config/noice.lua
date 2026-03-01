@@ -30,6 +30,12 @@ return function()
 				},
 				opts = { skip = true },
 			},
+			{
+				filter = {
+					find = "Cannot close last open window",
+				},
+				opts = { skip = true },
+			},
 		},
 		views = {
 			notify = {

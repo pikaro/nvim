@@ -1,3 +1,6 @@
+require("debug.trace_spawn")
+require("debug.trace_buffer_change")
+
 require("general")
 require("lazy_plugins")
 require("plugins.misc")

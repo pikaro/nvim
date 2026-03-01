@@ -36,7 +36,7 @@ local plugins = {
 	{ "williamboman/mason.nvim", config = "mason" },
 	{ "nvim-treesitter/nvim-treesitter", config = "treesitter" },
 	{ "rcarriga/nvim-notify", config = "notify" },
-	{ "dense-analysis/ale", config = "ale" },
+	-- { "dense-analysis/ale", config = "ale" },
 	{
 		"zbirenbaum/copilot.lua",
 		config = "copilot",
@@ -146,6 +146,11 @@ local plugins = {
 	{
 		"nvim-treesitter/nvim-treesitter-context",
 		config = "context",
+	},
+	{
+		"andythigpen/nvim-coverage",
+		config = "coverage",
+		dependencies = { "nvim-lua/plenary.nvim" },
 	},
 	-- {
 	-- 	"GeorgesAlkhouri/nvim-aider",

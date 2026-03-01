@@ -6,15 +6,18 @@ map.nnoremaps("<leader>]", "<C-i>")
 
 -- Write all buffers
 -- TODO: This makes all the modified buffers pop up quickly, how to fix?
+-- map.nnoremaps("<leader>w", function()
+-- 	for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+-- 		local listed = vim.bo[buf].buflisted
+-- 		local modifiable = vim.bo[buf].modifiable
+-- 		local modified = vim.bo[buf].modified
+-- 		if listed and modifiable and modified then
+-- 			vim.api.nvim_exec_autocmds("BufWritePre", { buffer = buf })
+-- 		end
+-- 	end
+-- 	vim.cmd("wa")
+-- end)
 map.nnoremaps("<leader>w", function()
-	for _, buf in ipairs(vim.api.nvim_list_bufs()) do
-		local listed = vim.bo[buf].buflisted
-		local modifiable = vim.bo[buf].modifiable
-		local modified = vim.bo[buf].modified
-		if listed and modifiable and modified then
-			vim.api.nvim_exec_autocmds("BufWritePre", { buffer = buf })
-		end
-	end
 	vim.cmd("wa")
 end)
 
@@ -59,6 +62,9 @@ map.vnoremaps(";", "%")
 -- Splits
 map.nnoremaps("-", ":split<cr>")
 map.nnoremaps("|", ":vsplit<cr>")
+
+-- Comment visual
+map.vnoremaps("#", "gc")
 
 -- Telescope
 local function telescope_extra()
@@ -270,17 +276,21 @@ map.nnoremaps("<leader>?", function()
 	require("which-key").show({ global = false })
 end)
 
+map.nnoremaps("=", "<Nop>")
+map.vnoremaps("=", "<Nop>")
+map.snoremaps("=", "<Nop>")
+
 -- Fugitive
-map.nnoremaps("<leader>hh", function()
+map.nnoremaps("=h", function()
 	vim.cmd.Git({ mods = { float = true } })
 end)
-map.nnoremaps("<leader>hc", function()
+map.nnoremaps("=c", function()
 	vim.cmd.Git({ args = { "commit" } })
 end)
-map.nnoremaps("<leader>hC", function()
+map.nnoremaps("=C", function()
 	vim.cmd.Git({ args = { "commit", "--amend" } })
 end)
-map.nnoremaps("<leader>hp", function()
+map.nnoremaps("=p", function()
 	vim.cmd.Git({ args = { "push" } })
 end)
 

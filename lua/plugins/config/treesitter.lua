@@ -153,6 +153,57 @@ hl("@variable.jinja", { link = "GruvboxYellow" })
 
 hl("@lsp.mod.abstract.cpp", { bold = true, italic = true, fg = gruv.neutral_purple })
 
+vim.api.nvim_create_autocmd("FileType", {
+	pattern = "*",
+	callback = function(args)
+		local buf = args.buf
+
+		-- 1) Skip non-file buffers (most plugin UIs)
+		if vim.bo[buf].buftype ~= "" then
+			return
+		end -- prompt, quickfix, terminal, nofile, etc.
+		if vim.bo[buf].bufhidden ~= "" then
+			return
+		end -- wipe/delete/hide buffers that vanish quickly
+
+		-- 2) Skip known UI filetypes (belt + suspenders)
+		local ft = vim.bo[buf].filetype
+		local ignore_ft = {
+			"TelescopePrompt",
+			"TelescopeResults",
+			"Trouble",
+			"NvimTree",
+			"neo-tree",
+			"help",
+			"lazy",
+			"mason",
+			"dashboard",
+		}
+		if vim.tbl_contains(ignore_ft, ft) then
+			return
+		end
+
+		-- 3) Only start if a Treesitter language + parser exist
+		local lang = vim.treesitter.language.get_lang(ft)
+		if not lang then
+			return
+		end
+
+		-- If there's no parser installed/available, get_parser will error.
+		local ok = pcall(vim.treesitter.get_parser, buf, lang)
+		if not ok then
+			return
+		end
+
+		vim.wo[0][0].foldexpr = "v:lua.vim.treesitter.foldexpr()"
+		vim.wo[0][0].foldmethod = "expr"
+		vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+
+		-- 4) Start highlighting safely
+		pcall(vim.treesitter.start, buf, lang)
+	end,
+})
+
 return function()
 	require("nvim-treesitter.config").setup({
 
@@ -187,9 +238,14 @@ return function()
 		"arduino",
 		"bash",
 		"c",
+		"comment",
 		"cpp",
 		"dockerfile",
 		"go",
+		"gomod",
+		"gosum",
+		"gotmpl",
+		"gowork",
 		"hcl",
 		"hcl",
 		"javascript",
@@ -202,6 +258,7 @@ return function()
 		"query",
 		"regex",
 		"scheme",
+		"sql",
 		"terraform",
 		"vim",
 		"vimdoc",

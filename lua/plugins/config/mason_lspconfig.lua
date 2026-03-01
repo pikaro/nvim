@@ -20,6 +20,7 @@ return function()
 			"nil_ls",
 			"phpactor",
 			"pyright",
+			"ruff",
 			"rust_analyzer",
 			"terraformls",
 			"texlab",

@@ -38,7 +38,7 @@ for _, language in ipairs(languages) do
 		local on_attach = function(client, bufnr)
 			lsp_status.on_attach(client, bufnr)
 			if config.diagnostics then
-				local namespace = vim.lsp.diagnostic.get_namespace(client.id)
+				local namespace = vim.lsp.diagnostic.get_namespace(client.id, config.uses_pull_diagnostics or false)
 				vim.diagnostic.config(diagnostics, namespace)
 			end
 			if config.on_attach then
@@ -61,7 +61,7 @@ for _, language in ipairs(languages) do
 		options = vim.tbl_extend("force", options, config.options or {})
 
 		vim.lsp.config(lsp, options)
-        vim.lsp.enable(lsp)
+		vim.lsp.enable(lsp)
 	end
 end
 

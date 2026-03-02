@@ -64,7 +64,8 @@ map.nnoremaps("-", ":split<cr>")
 map.nnoremaps("|", ":vsplit<cr>")
 
 -- Comment visual
-map.vnoremaps("#", "gc")
+map.vremaps("#", "gc")
+map.nremaps("#", "gcc")
 
 -- Telescope
 local function telescope_extra()
@@ -171,10 +172,12 @@ map.nnoremaps("<leader>I", function()
 end)
 
 -- Don't jump with *
-map.noremaps("*", "<Plug>(asterisk-z*)")
-map.noremaps("#", "<Plug>(asterisk-z#)")
-map.noremaps("g*", "<Plug>(asterisk-gz*)")
-map.noremaps("g#", "<Plug>(asterisk-gz#)")
+map.noremaps("*", function()
+	require("lasterisk").search({ silent = true })
+end)
+map.noremaps("g*", function()
+	require("lasterisk").search({ is_whole = true, silent = true })
+end)
 
 -- Prevent {} from landing in jump list
 map.nnoremaps("{", "<Cmd>keepjumps normal! {<CR>")
@@ -296,15 +299,15 @@ end)
 
 -- Aider
 
-map.nnoremaps("<leader>a/", "<cmd>Aider toggle<cr>")
-map.nnoremaps("<leader>as", "<cmd>Aider send<cr>")
-map.vnoremaps("<leader>as", "<cmd>Aider send<cr>")
-map.nnoremaps("<leader>ac", "<cmd>Aider command<cr>")
-map.nnoremaps("<leader>ab", "<cmd>Aider buffer<cr>")
-map.nnoremaps("<leader>aa", "<cmd>Aider add<cr>")
-map.nnoremaps("<leader>aA", "<cmd>Aider drop<cr>")
-map.nnoremaps("<leader>ar", "<cmd>Aider add readonly<cr>")
-map.nnoremaps("<leader>aR", "<cmd>Aider reset<cr>")
+-- map.nnoremaps("<leader>a/", "<cmd>Aider toggle<cr>")
+-- map.nnoremaps("<leader>as", "<cmd>Aider send<cr>")
+-- map.vnoremaps("<leader>as", "<cmd>Aider send<cr>")
+-- map.nnoremaps("<leader>ac", "<cmd>Aider command<cr>")
+-- map.nnoremaps("<leader>ab", "<cmd>Aider buffer<cr>")
+-- map.nnoremaps("<leader>aa", "<cmd>Aider add<cr>")
+-- map.nnoremaps("<leader>aA", "<cmd>Aider drop<cr>")
+-- map.nnoremaps("<leader>ar", "<cmd>Aider add readonly<cr>")
+-- map.nnoremaps("<leader>aR", "<cmd>Aider reset<cr>")
 
 -- LSP
 
@@ -317,6 +320,10 @@ local function lsb_bind(event)
 	map.nnoremaps("<leader>g", vim.lsp.buf.definition, opts)
 	map.nnoremaps("<leader>r", vim.lsp.buf.references, opts)
 	map.nnoremaps("<leader>i", vim.lsp.buf.implementation, opts)
+	map.nnoremaps("<leader>a", vim.lsp.buf.code_action, opts)
+	map.nnoremaps("<leader>h", function()
+		vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
+	end, opts)
 	map.nnoremaps("K", vim.lsp.buf.hover, opts)
 
 	local ft = vim.bo[event.buf].filetype
@@ -366,10 +373,10 @@ vim.api.nvim_create_autocmd("BufWritePre", {
 local ft_augroup = vim.api.nvim_create_augroup("UserFileTypeConfig", {})
 
 local ft_maps = {
-	["NvimTree"] = {
-		["<leader>aa"] = { { map.nnoremaps }, "<cmd>AiderTreeAddFile<cr>" },
-		["<leader>aA"] = { { map.nnoremaps }, "<cmd>AiderTreeDropFile<cr>" },
-	},
+	-- ["NvimTree"] = {
+	-- 	["<leader>aa"] = { { map.nnoremaps }, "<cmd>AiderTreeAddFile<cr>" },
+	-- 	["<leader>aA"] = { { map.nnoremaps }, "<cmd>AiderTreeDropFile<cr>" },
+	-- },
 }
 
 for ft, maps in pairs(ft_maps) do

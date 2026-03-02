@@ -24,6 +24,30 @@ local noremaps = function(lhs, rhs, opts)
 	map("", lhs, rhs, vim.tbl_extend("force", { noremap = true, silent = true }, opts or {}))
 end
 
+local nremaps = function(lhs, rhs, opts)
+	map("n", lhs, rhs, vim.tbl_extend("force", { remap = true, silent = true }, opts or {}))
+end
+
+local tremaps = function(lhs, rhs, opts)
+	map("t", lhs, rhs, vim.tbl_extend("force", { remap = true, silent = true }, opts or {}))
+end
+
+local iremaps = function(lhs, rhs, opts)
+	map("i", lhs, rhs, vim.tbl_extend("force", { remap = true, silent = true }, opts or {}))
+end
+
+local sremaps = function(lhs, rhs, opts)
+	map("s", lhs, rhs, vim.tbl_extend("force", { remap = true, silent = true }, opts or {}))
+end
+
+local vremaps = function(lhs, rhs, opts)
+	map("v", lhs, rhs, vim.tbl_extend("force", { remap = true, silent = true }, opts or {}))
+end
+
+local remaps = function(lhs, rhs, opts)
+	map("", lhs, rhs, vim.tbl_extend("force", { remap = true, silent = true }, opts or {}))
+end
+
 return {
 	nnoremaps = nnoremaps,
 	tnoremaps = tnoremaps,
@@ -31,4 +55,10 @@ return {
 	snoremaps = snoremaps,
 	vnoremaps = vnoremaps,
 	noremaps = noremaps,
+	nremaps = nremaps,
+	tremaps = tremaps,
+	iremaps = iremaps,
+	sremaps = sremaps,
+	vremaps = vremaps,
+	remaps = remaps,
 }

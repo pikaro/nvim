@@ -5,7 +5,7 @@ local plugins = {
 		config = "gruvbox",
 	},
 	"Afourcat/treesitter-terraform-doc.nvim",
-	"haya14busa/vim-asterisk",
+	"rapan931/lasterisk.nvim",
 	"hrsh7th/cmp-buffer",
 	-- "huggingface/llm.nvim",
 	"jez/vim-superman",
@@ -160,6 +160,16 @@ local plugins = {
 	-- 	},
 	-- 	config = "aider",
 	-- },
+	{
+		"MysticalDevil/inlay-hints.nvim",
+		event = "LspAttach",
+		dependencies = { "neovim/nvim-lspconfig" },
+		config = "inlay_hints",
+	},
+	{
+		"nvim-telescope/telescope-ui-select.nvim",
+		dependencies = { "nvim-telescope/telescope.nvim" },
+	},
 }
 
 for _, v in ipairs(plugins) do

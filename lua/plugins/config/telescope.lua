@@ -1,6 +1,13 @@
 return function()
 	local telescope_actions = require("telescope.actions")
 	require("telescope").setup({
+		extensions = {
+			["ui-select"] = {
+				require("telescope.themes").get_dropdown({
+					-- even more opts
+				}),
+			},
+		},
 		defaults = {
 			mappings = {
 				i = {
@@ -27,4 +34,6 @@ return function()
 			},
 		},
 	})
+
+	require("telescope").load_extension("ui-select")
 end

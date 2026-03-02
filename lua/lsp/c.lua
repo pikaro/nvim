@@ -29,7 +29,18 @@ return {
 	end,
 
 	options = {
-		single_file_support = true,
+		single_file_support = false,
+	},
+
+	settings = {
+		clangd = {
+			inlayHints = {
+				Enabled = false,
+				ParameterNames = true,
+				DeducedTypes = true,
+				Designators = true,
+			},
+		},
 	},
 
 	capabilities = {

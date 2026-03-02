@@ -65,6 +65,8 @@ for _, language in ipairs(languages) do
 	end
 end
 
+vim.lsp.inlay_hint.enable(false)
+
 local signs = { Error = "✗", Warn = "", Hint = " ", Info = "" }
 for type, icon in pairs(signs) do
 	local hl = "DiagnosticSign" .. type

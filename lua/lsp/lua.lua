@@ -11,7 +11,7 @@ return {
 				},
 			},
 			hint = {
-				enable = true,
+				enable = false,
 				paramName = "All",
 				paramType = true,
 				arrayIndex = "Disable",

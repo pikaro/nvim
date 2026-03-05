@@ -245,6 +245,14 @@ map.nnoremaps("[D", diag_error_prev)
 map.nnoremaps("]D", diag_error_next)
 map.nnoremaps("<leader>q", vim.diagnostic.setloclist)
 
+-- Coverage
+map.nnoremaps("[c", function()
+	require("coverage").jump_prev("uncovered")
+end)
+map.nnoremaps("]c", function()
+	require("coverage").jump_next("uncovered")
+end)
+
 -- Spectre
 map.nnoremaps("<leader>S", function()
 	require("spectre").open()

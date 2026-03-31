@@ -31,9 +31,18 @@ parsers.mermaid = {
 	},
 }
 
-vim.treesitter.language.register("jinja", "jinja")
-vim.treesitter.language.register("plantuml", "plantuml")
-vim.treesitter.language.register("mermaid", "mermaid")
+local registrations = {
+	["jinja"] = { "jinja" },
+	["plantuml"] = { "plantuml" },
+	["mermaid"] = { "mermaid" },
+	["hcl"] = { "terraform-test" },
+}
+
+for parser, fts in pairs(registrations) do
+	for _, ft in ipairs(fts) do
+		vim.treesitter.language.register(parser, ft)
+	end
+end
 
 local function read_file(path)
 	local file = io.open(path, "r")
@@ -197,7 +206,8 @@ vim.api.nvim_create_autocmd("FileType", {
 
 		vim.wo[0][0].foldexpr = "v:lua.vim.treesitter.foldexpr()"
 		vim.wo[0][0].foldmethod = "expr"
-		vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+		-- NOTE: EXPERIMENTAL - bad
+		-- vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
 
 		-- 4) Start highlighting safely
 		pcall(vim.treesitter.start, buf, lang)

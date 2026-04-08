@@ -457,6 +457,9 @@ local function close_all_but_current()
 	end
 end
 
+map.noremaps("<S-Up>", "<nop>")
+map.noremaps("<S-Down>", "<nop>")
+
 map.nnoremaps("q:", "<nop>")
 map.nnoremaps("Q", "<nop>")
 map.nnoremaps("q", "<nop>")

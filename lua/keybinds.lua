@@ -68,6 +68,9 @@ map.vremaps("#", "gc")
 map.nremaps("#", "gcc")
 
 -- Telescope
+
+local T = require("telescope.builtin")
+
 local function telescope_extra()
 	local f = io.open(".telescope_extra", "r")
 	if not f then
@@ -97,11 +100,11 @@ end
 
 local function live_grep_with_extra(opts)
 	local extra = telescope_extra() or {}
-	require("telescope.builtin").live_grep(vim.tbl_extend("force", extra, opts or {}))
+	T.live_grep(vim.tbl_extend("force", extra, opts or {}))
 end
 local function find_files_with_extra(opts)
 	local extra = telescope_extra() or {}
-	require("telescope.builtin").find_files(vim.tbl_extend("force", extra, opts or {}))
+	T.find_files(vim.tbl_extend("force", extra, opts or {}))
 end
 
 map.nnoremaps("<C-o>", function()
@@ -123,40 +126,28 @@ map.nnoremaps("<C-n>", function()
 end)
 
 local function from_project_git_root()
-	local function is_git_repo()
-		vim.fn.system("git rev-parse --is-inside-work-tree")
-
-		return vim.v.shell_error == 0
-	end
-
-	local function get_git_root()
-		local dot_git_path = vim.fn.finddir(".git", ".;")
-		return vim.fn.fnamemodify(dot_git_path, ":h")
-	end
-
-	local opts = {}
-
-	if is_git_repo() then
-		opts = {
-			cwd = get_git_root(),
-		}
-	end
-
-	return opts
+	local root = vim.fs.root(0, { ".git" })
+	return root and { cwd = root } or {}
 end
 
 local function live_grep_from_project_git_root()
-	local opts = from_project_git_root()
-	require("telescope.builtin").live_grep(opts)
+	T.live_grep(from_project_git_root())
 end
 
 local function find_files_from_project_git_root()
-	local opts = from_project_git_root()
-	require("telescope.builtin").find_files(opts)
+	T.find_files(from_project_git_root())
 end
 
 map.nnoremaps("<leader>o", live_grep_from_project_git_root)
 map.nnoremaps("<leader>p", find_files_from_project_git_root)
+
+map.nnoremaps("'", T.lsp_dynamic_workspace_symbols)
+map.nnoremaps('"', T.lsp_document_symbols)
+map.nnoremaps("<leader>g", T.lsp_definitions)
+map.nnoremaps("<leader>R", T.lsp_references)
+map.nnoremaps("<leader>i", T.lsp_implementations)
+map.nnoremaps("<leader>I", T.lsp_incoming_calls)
+map.nnoremaps("<leader>O", T.lsp_outgoing_calls)
 
 -- Doge
 map.nnoremaps("<leader>b", "<Plug>(doge-generate)")
@@ -325,12 +316,7 @@ local function lsb_bind(event)
 
 	local opts = { buffer = event.buf }
 	map.nnoremaps("<leader>G", vim.lsp.buf.declaration, opts)
-	map.nnoremaps("<leader>g", vim.lsp.buf.definition, opts)
 	map.nnoremaps("<leader>r", vim.lsp.buf.rename, opts)
-	map.nnoremaps("<leader>R", vim.lsp.buf.references, opts)
-	map.nnoremaps("<leader>i", vim.lsp.buf.implementation, opts)
-	map.nnoremaps("<leader>I", vim.lsp.buf.incoming_calls, opts)
-	map.nnoremaps("<leader>O", vim.lsp.buf.outgoing_calls, opts)
 	map.nnoremaps("<leader>a", vim.lsp.buf.code_action, opts)
 	map.nnoremaps("<leader>h", function()
 		vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())

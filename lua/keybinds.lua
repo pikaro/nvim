@@ -144,7 +144,7 @@ map.nnoremaps("<leader>p", find_files_from_project_git_root)
 map.nnoremaps("'", T.lsp_dynamic_workspace_symbols)
 map.nnoremaps('"', T.lsp_document_symbols)
 map.nnoremaps("<leader>g", T.lsp_definitions)
-map.nnoremaps("<leader>R", T.lsp_references)
+map.nnoremaps("<leader>s", T.lsp_references)
 map.nnoremaps("<leader>i", T.lsp_implementations)
 map.nnoremaps("<leader>I", T.lsp_incoming_calls)
 map.nnoremaps("<leader>O", T.lsp_outgoing_calls)
@@ -295,6 +295,9 @@ end)
 map.nnoremaps("=p", function()
 	vim.cmd.Git({ args = { "push" } })
 end)
+map.nnoremaps("=f", function()
+	require("telescope.builtin").git_status()
+end)
 
 -- Aider
 
@@ -318,7 +321,7 @@ local function lsb_bind(event)
 	map.nnoremaps("<leader>G", vim.lsp.buf.declaration, opts)
 	map.nnoremaps("<leader>r", vim.lsp.buf.rename, opts)
 	map.nnoremaps("<leader>a", vim.lsp.buf.code_action, opts)
-	map.nnoremaps("<leader>h", function()
+	map.nnoremaps("<leader>H", function()
 		vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
 	end, opts)
 	map.nnoremaps("K", vim.lsp.buf.hover, opts)
@@ -332,7 +335,7 @@ local function lsb_bind(event)
 	}
 	local sig_help = sig_helps[ft] or vim.lsp.buf.signature_help
 
-	map.nnoremaps("<leader>s", sig_help, opts)
+	map.nnoremaps("<leader>h", sig_help, opts)
 
 	-- vim.keymap.set('n', '<space>wa', vim.lsp.buf.add_workspace_folder, opts)
 	-- vim.keymap.set('n', '<space>wr', vim.lsp.buf.remove_workspace_folder, opts)

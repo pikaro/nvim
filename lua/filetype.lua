@@ -11,6 +11,7 @@ vim.filetype.add({
 		["puml"] = "plantuml",
 		["mount"] = "systemd",
 		["service"] = "systemd",
+		["sarif"] = "json",
 	},
 	pattern = {
 		["%.env%..*"] = "env",

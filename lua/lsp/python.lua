@@ -16,6 +16,12 @@ return {
 				diagnosticMode = "workspace", -- openFilesOnly, workspace
 				typeCheckingMode = "standard", -- off, basic, standard, strict
 				useLibraryCodeForTypes = true,
+				reportShadowedImport = "warning",
+				reportMissingSuperCall = false,
+				reportUninitializedInstanceVariable = "warning",
+				reportPropertyTypeMismatch = "warning",
+				reportUnusedCallResult = "warning",
+				reportUnusedImport = "information",
 				-- stubPath = ".",
 			},
 		},

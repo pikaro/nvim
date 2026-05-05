@@ -1,3 +1,17 @@
+local lspconfig = require("lspconfig")
+
+local root_files = {
+	"pyrightconfig.json",
+	"pyproject.toml",
+	"setup.py",
+	"setup.cfg",
+	"requirements.txt",
+	"Pipfile",
+	".git",
+	"compile_commands.json",
+	"package.json",
+}
+
 return {
 	lsp = "pyright",
 	options = {
@@ -22,6 +36,7 @@ return {
 				reportPropertyTypeMismatch = "warning",
 				reportUnusedCallResult = "warning",
 				reportUnusedImport = "information",
+				indexing = true,
 				-- stubPath = ".",
 			},
 		},
@@ -37,4 +52,9 @@ return {
 			severity = { min = vim.diagnostic.severity.INFO },
 		},
 	},
+	root_dir = function(bufnr, on_dir)
+		local fname = vim.api.nvim_buf_get_name(bufnr)
+		local root = lspconfig.util.root_pattern(unpack(root_files))(fname)
+		on_dir(root or lspconfig.util.path.dirname(fname))
+	end,
 }

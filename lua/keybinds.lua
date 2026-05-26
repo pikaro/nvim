@@ -147,7 +147,7 @@ map.nnoremaps("<leader>g", T.lsp_definitions)
 map.nnoremaps("<leader>s", T.lsp_references)
 map.nnoremaps("<leader>i", T.lsp_implementations)
 map.nnoremaps("<leader>I", T.lsp_incoming_calls)
-map.nnoremaps("<leader>O", T.lsp_outgoing_calls)
+-- map.nnoremaps("<leader>O", T.lsp_outgoing_calls)
 
 -- Doge
 map.nnoremaps("<leader>b", "<Plug>(doge-generate)")

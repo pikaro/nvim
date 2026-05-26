@@ -59,7 +59,7 @@ local function get_predefined(parser, kind)
 	local predefined_path = vim.fn.stdpath("data") .. "/lazy/nvim-treesitter/" .. query_path
 	local custom_path = vim.fn.stdpath("config") .. "/" .. query_path
 	local after_path = vim.fn.stdpath("config") .. "/after/" .. query_path
-	local parser_queries = read_file(custom_path) or read_file(predefined_path)
+	local parser_queries = read_file(custom_path) or read_file(predefined_path) or ""
 	parser_queries = parser_queries .. "\n" .. (read_file(after_path) or "")
 	return parser_queries
 end

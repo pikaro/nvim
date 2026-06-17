@@ -114,20 +114,17 @@ map.nnoremaps("<C-p>", function()
 	find_files_with_extra()
 end)
 
-map.nnoremaps("<leader>O", function()
-	live_grep_with_extra({ hidden = true })
-end)
-map.nnoremaps("<leader>P", function()
-	find_files_with_extra({ hidden = true })
-end)
-
 map.nnoremaps("<C-n>", function()
 	require("telescope").extensions.notify.notify()
 end)
 
 local function from_project_git_root()
 	local root = vim.fs.root(0, { ".git" })
-	return root and { cwd = root } or {}
+	local ret = { hidden = true }
+	if root then
+		ret.cwd = root
+	end
+	return ret
 end
 
 local function live_grep_from_project_git_root()
@@ -244,9 +241,19 @@ map.nnoremaps("]c", function()
 	require("coverage").jump_next("uncovered")
 end)
 
--- Spectre
-map.nnoremaps("<leader>S", function()
-	require("spectre").open()
+-- Grug
+
+map.nnoremaps("<localleader>rr", function()
+	require("grug-far").open({ prefills = { search = vim.fn.expand("<cword>") } })
+end)
+map.nnoremaps("<localleader>rt", function()
+	require("grug-far").open({ transient = true })
+end)
+map.nnoremaps("<localleader>rf", function()
+	require("grug-far").open({ prefills = { paths = vim.fn.expand("%") } })
+end)
+map.vnoremaps("<localleader>rv", function()
+	require("grug-far").with_visual_selection({ prefills = { paths = vim.fn.expand("%") } })
 end)
 
 -- Copilot

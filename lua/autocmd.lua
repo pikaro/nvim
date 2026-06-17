@@ -8,9 +8,23 @@ local function aucmd(event, pattern, callback)
 	})
 end
 
+local no_number_filetypes = {
+	["grug-far"] = true,
+	["grug-far-history"] = true,
+	["grug-far-help"] = true,
+}
+
 aucmd({ "BufEnter", "FocusGained", "InsertLeave" }, "*", function(event)
 	local listed = vim.api.nvim_get_option_value("buflisted", { buf = event.buf })
 	local modifiable = vim.api.nvim_get_option_value("modifiable", { buf = event.buf })
+	local filetype = vim.api.nvim_get_option_value("filetype", { buf = event.buf })
+
+	if no_number_filetypes[filetype] then
+		vim.wo.number = false
+		vim.wo.relativenumber = false
+		return
+	end
+
 	if not listed or not modifiable then
 		return
 	end

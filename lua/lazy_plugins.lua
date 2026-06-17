@@ -140,8 +140,8 @@ local plugins = {
 		dependencies = { "folke/todo-comments.nvim" },
 	},
 	{
-		"nvim-pack/nvim-spectre",
-		config = "spectre",
+		"MagicDuck/grug-far.nvim",
+		config = "grug_far",
 	},
 	{
 		"nvim-treesitter/nvim-treesitter-context",

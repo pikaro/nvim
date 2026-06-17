@@ -11,8 +11,6 @@ return function()
 				dismiss = "<a-s-h>",
 			},
 		},
-		copilot_model = "gpt-41-copilot",
-		-- copilot_model = "gpt-5-mini",
 		filetypes = {
 			yaml = true,
 			json = false,

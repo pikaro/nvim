@@ -1,4 +1,5 @@
 local query = require("vim.treesitter.query")
+local is_headless = require("functions.is_headless")
 query.add_directive("vim-match-offset!", require("treesitter.directives.vim_match_offset"), { all = true })
 
 local parsers = require("nvim-treesitter.parsers")
@@ -215,11 +216,13 @@ vim.api.nvim_create_autocmd("FileType", {
 })
 
 return function()
+	local install_missing = not is_headless()
+
 	require("nvim-treesitter.config").setup({
 
 		-- Install parsers synchronously
 		sync_install = false,
-		auto_install = true,
+		auto_install = install_missing,
 		ignore_install = {},
 
 		highlight = {
@@ -244,6 +247,10 @@ return function()
 		},
 	})
 
+	if not install_missing then
+		return
+	end
+
 	local ensure_installed = {
 		"arduino",
 		"bash",
@@ -257,7 +264,6 @@ return function()
 		"gotmpl",
 		"gowork",
 		"hcl",
-		"hcl",
 		"javascript",
 		"json",
 		"lua",
@@ -270,6 +276,8 @@ return function()
 		"scheme",
 		"sql",
 		"terraform",
+		"tsx",
+		"typescript",
 		"vim",
 		"vimdoc",
 		"yaml",

@@ -1,6 +1,4 @@
-local lspconfig = require("lspconfig")
-
-local root_files = {
+local root_markers = {
 	"pyrightconfig.json",
 	"pyproject.toml",
 	"setup.py",
@@ -14,9 +12,7 @@ local root_files = {
 
 return {
 	lsp = "pyright",
-	options = {
-		single_file_support = true,
-	},
+	root_markers = root_markers,
 	settings = {
 		pyright = {
 			disableLanguageServices = false,
@@ -52,9 +48,4 @@ return {
 			severity = { min = vim.diagnostic.severity.INFO },
 		},
 	},
-	root_dir = function(bufnr, on_dir)
-		local fname = vim.api.nvim_buf_get_name(bufnr)
-		local root = lspconfig.util.root_pattern(unpack(root_files))(fname)
-		on_dir(root or lspconfig.util.path.dirname(fname))
-	end,
 }

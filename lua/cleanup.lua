@@ -1,10 +1,16 @@
-local function clean_extra_spaces()
-	local save_cursor = vim.fn.getpos(".")
+local function clean_extra_spaces(event)
+	if not vim.api.nvim_get_option_value("modifiable", { buf = event.buf }) then
+		return
+	end
+
 	local old_query = vim.fn.getreg("/")
 
-	vim.cmd("%s/\\s\\+$//e")
+	vim.api.nvim_buf_call(event.buf, function()
+		local save_cursor = vim.fn.getpos(".")
+		vim.cmd("%s/\\s\\+$//e")
+		vim.fn.setpos(".", save_cursor)
+	end)
 
-	vim.fn.setpos(".", save_cursor)
 	vim.fn.setreg("/", old_query)
 end
 

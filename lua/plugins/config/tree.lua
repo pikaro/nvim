@@ -91,7 +91,7 @@ return function()
 			side = "right",
 			preserve_window_proportions = true,
 			width = {
-				max = 30,
+				max = 40,
 			},
 			float = {
 				enable = true,
@@ -99,7 +99,7 @@ return function()
 				open_win_config = function()
 					return {
 						row = 2,
-						width = 30,
+						width = 40,
 						border = "rounded",
 						relative = "editor",
 						col = vim.o.columns,
@@ -113,7 +113,7 @@ return function()
 			group_empty = false,
 			full_name = false,
 			root_folder_label = ":~:s?$?/..?",
-			indent_width = 1,
+			indent_width = 2,
 			special_files = { "Cargo.toml", "Makefile", "README.md", "readme.md" },
 			hidden_display = "none",
 			symlink_destination = false,

@@ -1,4 +1,10 @@
 return function()
+	if require("functions.is_headless")() then
+		-- WARNING: copilot.lua starts a Node language server during setup. Keep this
+		-- guard so repeated headless Neovim runs cannot orphan Copilot Node processes.
+		return
+	end
+
 	require("copilot").setup({
 		suggestion = {
 			auto_trigger = true,
@@ -34,4 +40,27 @@ return function()
 			},
 		},
 	})
+
+	local status_icons = {
+		[""] = "💤",
+		normal = "🟢",
+		inprogress = "⏳",
+		warning = "❗",
+		error = "❌",
+	}
+
+	require("copilot.status").register_status_notification_handler(function(data)
+		local status = string.lower(data.status or "")
+		local message = data.message or ""
+		local value = status_icons[status] or "🚫"
+
+		if message ~= "" then
+			value = value .. " " .. message
+		end
+
+		vim.schedule(function()
+			vim.g.copilot_status = value
+			vim.cmd.redrawstatus()
+		end)
+	end)
 end

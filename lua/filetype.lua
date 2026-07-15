@@ -19,8 +19,10 @@ vim.filetype.add({
 
 		[".*%.tftest%.hcl"] = "terraform-test",
 
-		["docker%-compose%.ya?ml.*%.j2"] = { "yaml.compose.jinja", { priority = 0 } },
-		["docker%-compose%.ya?ml.*"] = { "yaml.compose", { priority = -10 } },
+		-- WARNING: these priorities must beat Neovim's built-in YAML detector;
+		-- docker-compose files need exact dotted filetypes for LSP matching.
+		["docker%-compose%.ya?ml.*%.j2"] = { "yaml.compose.jinja", { priority = 30 } },
+		["docker%-compose%.ya?ml.*"] = { "yaml.compose", { priority = 20 } },
 		[".*%.ya?ml%.tpl%.j2"] = { "yaml.jinja", { priority = -20 } },
 		[".*%.ya?ml%.j2"] = { "yaml.jinja", { priority = -20 } },
 		[".*%.j2"] = { "jinja", { priority = -100 } },
@@ -48,66 +50,59 @@ vim.filetype.add({
 	},
 })
 
+local two_space_100 = {
+	shiftwidth = 2,
+	tabstop = 2,
+	softtabstop = 2,
+	colorcolumn = "100",
+}
+
+local yaml_like = vim.tbl_extend("force", two_space_100, {
+	indentkeys = "!^F,o,O,0#,0},0],0-",
+})
+
+local two_space = {
+	shiftwidth = 2,
+	tabstop = 2,
+	softtabstop = 2,
+}
+
 local ft_options = {
-	["yaml"] = {
-		shiftwidth = 2,
-		tabstop = 2,
-		softtabstop = 2,
-		colorcolumn = "100",
-		indentkeys = "!^F,o,O,0#,0},0],0-",
-	},
-	["helm"] = {
-		shiftwidth = 2,
-		tabstop = 2,
-		softtabstop = 2,
-		colorcolumn = "100",
-		indentkeys = "!^F,o,O,0#,0},0],0-",
-	},
-	["nix"] = {
-		shiftwidth = 2,
-		tabstop = 2,
-		softtabstop = 2,
-		colorcolumn = "100",
-	},
-	["json"] = {
-		shiftwidth = 2,
-		tabstop = 2,
-		softtabstop = 2,
-		colorcolumn = "100",
-	},
-	["jinja"] = {
-		shiftwidth = 2,
-		tabstop = 2,
-		softtabstop = 2,
-	},
+	["yaml"] = yaml_like,
+	["helm"] = yaml_like,
+	["nix"] = two_space_100,
+	["json"] = two_space_100,
+	["jinja"] = two_space,
 	["python"] = {
 		shiftwidth = 4,
 		tabstop = 4,
 		softtabstop = 4,
 		colorcolumn = "100",
 	},
-	["javascript"] = {
-		shiftwidth = 2,
-		tabstop = 2,
-		softtabstop = 2,
-		colorcolumn = "100",
-	},
-	["terraform"] = {
-		shiftwidth = 2,
-		tabstop = 2,
-		softtabstop = 2,
-		colorcolumn = "100",
-	},
-	["terraform-vars"] = {
-		shiftwidth = 2,
-		tabstop = 2,
-		softtabstop = 2,
-		colorcolumn = "100",
-	},
+	["javascript"] = two_space_100,
+	["javascriptreact"] = two_space_100,
+	["typescript"] = two_space_100,
+	["typescriptreact"] = two_space_100,
+	["terraform"] = two_space_100,
+	["terraform-vars"] = two_space_100,
 	["go"] = {
 		colorcolumn = "100",
 	},
 }
+
+local dotted_ft_options = {
+	["javascript.jsx"] = two_space_100,
+	["typescript.tsx"] = two_space_100,
+	["yaml.compose"] = yaml_like,
+	["yaml.compose.jinja"] = yaml_like,
+	["yaml.gitlabci"] = yaml_like,
+	["yaml.jinja"] = yaml_like,
+	["yaml.ansible"] = yaml_like,
+}
+
+for filetype, options in pairs(dotted_ft_options) do
+	ft_options[filetype] = options
+end
 
 local ft_augroup = vim.api.nvim_create_augroup("filetype_options", { clear = true })
 for filetype, _ in pairs(ft_options) do

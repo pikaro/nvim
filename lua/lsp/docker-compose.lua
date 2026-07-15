@@ -1,4 +1,5 @@
 return {
 	lsp = "docker_compose_language_service",
-	filetypes = { "compose", "yaml.compose", "yaml.compose.*" },
+	-- WARNING: LSP filetypes are exact strings in Neovim 0.12; wildcard-style entries do not match.
+	filetypes = { "compose", "yaml.compose", "yaml.compose.jinja" },
 }

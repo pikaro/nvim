@@ -26,8 +26,8 @@ end
 
 -- Wrap libuv spawn (some plugins go this low)
 do
-	local orig = vim.loop.spawn
-	vim.loop.spawn = function(file, options, on_exit)
+	local orig = vim.uv.spawn
+	vim.uv.spawn = function(file, options, on_exit)
 		write("uv.spawn: " .. tostring(file) .. " " .. vim.inspect(options and options.args))
 		return orig(file, options, on_exit)
 	end

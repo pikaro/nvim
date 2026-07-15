@@ -1,7 +1,5 @@
-local vim = vim or {}
-
 local function get_hl(group)
-	local status, hl = pcall(vim.api.nvim_get_hl_by_name, group, true)
+	local status, hl = pcall(vim.api.nvim_get_hl, 0, { name = group, link = false })
 	if not status then
 		return {}
 	end
@@ -55,8 +53,8 @@ vim.api.nvim_create_autocmd("ColorScheme", {
 })
 
 -- Switch between two colorschemes when switching windows
-set_hl("ActiveWindow", { bg = "#1c1c1c", fg = get_hl("Normal").foreground })
-set_hl("InactiveWindow", { bg = "#262626", fg = get_hl("Normal").foreground })
+set_hl("ActiveWindow", { bg = "#1c1c1c", fg = get_hl("Normal").fg })
+set_hl("InactiveWindow", { bg = "#262626", fg = get_hl("Normal").fg })
 
 -- LSP
 set_hl("DiagnosticUnderlineWarn", { bg = "#3c2a1f", underline = false, undercurl = false })
@@ -64,7 +62,7 @@ set_hl("DiagnosticUnderlineError", { bg = "#4c1f1f", underline = false, undercur
 
 local function update_winhighlight(is_active)
 	local hl_group = is_active and "ActiveWindow" or "InactiveWindow"
-	vim.api.nvim_win_set_option(0, "winhighlight", "Normal:" .. hl_group .. ",NormalNC:" .. hl_group)
+	vim.api.nvim_set_option_value("winhighlight", "Normal:" .. hl_group .. ",NormalNC:" .. hl_group, { win = 0 })
 end
 
 vim.api.nvim_create_augroup("WindowHighlights", { clear = true })

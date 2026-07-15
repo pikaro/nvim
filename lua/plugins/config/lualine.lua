@@ -1,6 +1,4 @@
-local lsp_status = require("lsp-status")
-
-vim.g.copilot_status = "💤"
+vim.g.copilot_status = vim.g.copilot_status or "💤"
 
 local function get_copilot_status()
 	return vim.g.copilot_status
@@ -27,7 +25,7 @@ return function()
 	require("lualine").setup({
 		sections = {
 			lualine_a = { get_copilot_status, get_arduino_status, "mode" },
-			lualine_c = { "filename", lsp_status.status() },
+			lualine_c = { "filename", vim.lsp.status },
 		},
 	})
 end

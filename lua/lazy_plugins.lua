@@ -1,3 +1,9 @@
+local is_headless = require("functions.is_headless")
+
+local function is_interactive()
+	return not is_headless()
+end
+
 local plugins = {
 	{
 		"ellisonleao/gruvbox.nvim",
@@ -8,19 +14,15 @@ local plugins = {
 	"rapan931/lasterisk.nvim",
 	"hrsh7th/cmp-buffer",
 	-- "huggingface/llm.nvim",
-	"jez/vim-superman",
 	-- "lepture/vim-jinja",
 	"mfussenegger/nvim-ansible",
 	"neovim/nvim-lspconfig",
 	"nvim-lua/plenary.nvim",
 	"nvim-tree/nvim-web-devicons",
 	"onsails/lspkind.nvim",
-	"pangloss/vim-javascript",
 	-- "rafamadriz/friendly-snippets",
-	"ryanoasis/vim-devicons",
 	-- "saadparwaiz1/cmp_luasnip",
 	"takelley1/ansible-doc.vim",
-	"xolox/vim-misc",
 	"aklt/plantuml-syntax",
 	"creativenull/efmls-configs-nvim",
 	"tpope/vim-fugitive",
@@ -39,7 +41,11 @@ local plugins = {
 	-- { "dense-analysis/ale", config = "ale" },
 	{
 		"zbirenbaum/copilot.lua",
+		cond = is_interactive,
 		config = "copilot",
+		-- WARNING: Do not lazy-load core Copilot on InsertEnter. It misses the first
+		-- insert session because suggestion autocmds are registered after the event.
+		lazy = false,
 		-- requires = { "copilotlsp-nvim/copilot-lsp" }, -- NES is annoying
 	},
 	-- { "copilotlsp-nvim/copilot-lsp", config = "copilot_lsp" },
@@ -52,7 +58,7 @@ local plugins = {
 	},
 	{
 		"nvim-lualine/lualine.nvim",
-		dependencies = { "ryanoasis/vim-devicons", "nvim-tree/nvim-web-devicons", "nvim-lua/lsp-status.nvim" },
+		dependencies = { "nvim-tree/nvim-web-devicons" },
 		config = "lualine",
 	},
 	{
@@ -68,7 +74,19 @@ local plugins = {
 	},
 	{
 		"CopilotC-Nvim/CopilotChat.nvim",
-		event = "VeryLazy",
+		cmd = {
+			"CopilotChat",
+			"CopilotChatClose",
+			"CopilotChatLoad",
+			"CopilotChatModels",
+			"CopilotChatOpen",
+			"CopilotChatPrompts",
+			"CopilotChatReset",
+			"CopilotChatSave",
+			"CopilotChatStop",
+			"CopilotChatToggle",
+		},
+		cond = is_interactive,
 		dependencies = { "zbirenbaum/copilot.lua", "nvim-lua/plenary.nvim" },
 		build = "make tiktoken",
 		config = "copilot_chat",
@@ -84,11 +102,6 @@ local plugins = {
 		config = "autopairs",
 	},
 	{
-		"jonahgoldwastaken/copilot-status.nvim",
-		dependencies = { "zbirenbaum/copilot.lua" },
-		config = "copilot_status",
-	},
-	{
 		"nvim-telescope/telescope.nvim",
 		dependencies = { "nvim-lua/plenary.nvim" },
 		config = "telescope",
@@ -101,7 +114,7 @@ local plugins = {
 	},
 	{
 		"nvim-tree/nvim-tree.lua",
-		dependencies = { "ryanoasis/vim-devicons" },
+		dependencies = { "nvim-tree/nvim-web-devicons" },
 		config = "tree",
 	},
 	{
@@ -124,11 +137,12 @@ local plugins = {
 		},
 		build = ':lua require("go.install").update_all_sync()',
 	},
-	-- {
-	-- 	"folke/which-key.nvim",
-	-- 	opts = "whichkey",
-	-- 	event = "VeryLazy",
-	-- },
+	{
+		"folke/which-key.nvim",
+		cond = is_interactive,
+		opts = "whichkey",
+		event = "VeryLazy",
+	},
 	{
 		"folke/todo-comments.nvim",
 		dependencies = { "nvim-lua/plenary.nvim" },
@@ -183,16 +197,10 @@ for _, v in ipairs(plugins) do
 		local options = v.opts
 		v.opts = require("plugins.options." .. options)
 	end
-	if v.dependencies then
-		local dependencies = v.dependencies
-		local after = v.after or {}
-		after = vim.tbl_extend("force", after, dependencies)
-		v.after = after
-	end
 end
 
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-if not (vim.uv or vim.loop).fs_stat(lazypath) then
+if not vim.uv.fs_stat(lazypath) then
 	local lazyrepo = "https://github.com/folke/lazy.nvim.git"
 	local out = vim.fn.system({ "git", "clone", "--filter=blob:none", "--branch=stable", lazyrepo, lazypath })
 	if vim.v.shell_error ~= 0 then
@@ -210,7 +218,6 @@ vim.opt.rtp:prepend(lazypath)
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 
-vim.opt.runtimepath:prepend(vim.fn.stdpath("data") .. "/lazy/lazy.nvim")
 require("lazy").setup(plugins)
 
 local local_plugin_path = vim.fn.expand("~/.vimrc.local-plugin")

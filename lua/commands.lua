@@ -33,6 +33,29 @@ cmd("VimLog", function()
 	vim.cmd("edit " .. log)
 end)
 
+cmd("SuperMan", function(opts)
+	vim.api.nvim_cmd({
+		cmd = "Man",
+		args = vim.split(opts.args, "%s+", { trimempty = true }),
+	}, {})
+
+	if vim.api.nvim_buf_line_count(0) == 1 then
+		vim.cmd.cquit()
+	end
+
+	vim.cmd("silent only")
+	vim.opt_local.readonly = true
+	vim.opt_local.modifiable = false
+	vim.opt_local.swapfile = false
+	vim.opt_local.expandtab = false
+	vim.opt_local.tabstop = 8
+	vim.opt_local.softtabstop = 8
+	vim.opt_local.shiftwidth = 8
+	vim.opt_local.list = false
+	vim.opt_local.colorcolumn = "0"
+	vim.keymap.set("n", "q", "<cmd>quit<cr>", { buffer = true, silent = true, desc = "Close man page" })
+end, { nargs = "+", complete = "shellcmd" })
+
 cmd("W", function()
 	local file = vim.fn.expand("%")
 	if vim.fn.empty(vim.fn.getbufvar(vim.fn.bufname("%"), "&buftype")) and not file:match("^%w+:/") then

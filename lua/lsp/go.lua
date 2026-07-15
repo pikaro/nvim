@@ -4,7 +4,7 @@ local downgrade = {
 	["UnusedParam"] = vim.diagnostic.severity.WARN,
 }
 
-local filter_handler = function(err, result, ctx, config)
+local filter_handler = function(err, result, ctx)
 	if not result then
 		return
 	end
@@ -20,12 +20,13 @@ local filter_handler = function(err, result, ctx, config)
 			end
 		end
 	end
-	vim.lsp.diagnostic.on_publish_diagnostics(err, result, ctx, config)
+	vim.lsp.diagnostic.on_publish_diagnostics(err, result, ctx)
 end
 
 return {
 	lsp = "gopls",
 	filetypes = { "go", "gomod", "gowork", "gotmpl" },
+	format = false,
 	settings = {
 		gopls = {
 			-- See efm.lua - wrapped by golines
@@ -46,6 +47,6 @@ return {
 		underline = true,
 	},
 	handlers = {
-		["textDocument/publishDiagnostics"] = vim.lsp.with(filter_handler, {}),
+		["textDocument/publishDiagnostics"] = filter_handler,
 	},
 }

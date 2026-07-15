@@ -80,9 +80,9 @@ local function telescope_extra()
 	local paths = {}
 	for line in f:lines() do
 		-- trim whitespace
-		line = line:match("^%s*(.-)%s*$")
-		if line ~= "" then
-			table.insert(paths, line)
+		local trimmed = line:match("^%s*(.-)%s*$")
+		if trimmed ~= "" then
+			table.insert(paths, trimmed)
 		end
 	end
 	f:close()
@@ -258,8 +258,8 @@ end)
 
 -- Copilot
 local function ask_copilot(target)
-	local copilot = require("CopilotChat")
 	return function()
+		local copilot = require("CopilotChat")
 		return copilot.ask(
 			vim.fn.input("Ask " .. target .. ": "),
 			{ selection = require("CopilotChat.select")[target] }
@@ -269,7 +269,9 @@ end
 
 map.nnoremaps("<leader>c", ask_copilot("buffer"))
 map.vnoremaps("<leader>c", ask_copilot("visual"))
-map.nnoremaps("<leader>C", require("CopilotChat").toggle)
+map.nnoremaps("<leader>C", function()
+	require("CopilotChat").toggle()
+end)
 
 -- Zen
 map.nnoremaps("<leader>f", function()
@@ -362,17 +364,22 @@ vim.api.nvim_create_autocmd("LspAttach", {
 	callback = lsb_bind,
 })
 
+local function format_on_save(event)
+	local bufnr = event.buf
+	for _, client in ipairs(vim.lsp.get_clients({ bufnr = bufnr })) do
+		if
+			not client:supports_method("textDocument/willSaveWaitUntil", bufnr)
+			and client:supports_method("textDocument/formatting", bufnr)
+		then
+			vim.lsp.buf.format({ bufnr = bufnr, id = client.id, timeout_ms = 1000 })
+			return
+		end
+	end
+end
+
 vim.api.nvim_create_autocmd("BufWritePre", {
 	group = lsp_augroup,
-	callback = function()
-		local clients = vim.lsp.get_clients({ bufnr = 0 })
-		for _, client in ipairs(clients) do
-			if client and client:supports_method("textDocument/formatting") then
-				vim.lsp.buf.format()
-				return
-			end
-		end
-	end,
+	callback = format_on_save,
 })
 
 -- Filetype specific keybinds
@@ -444,9 +451,9 @@ local function close_all_but_current()
 	local bufs = vim.api.nvim_list_bufs()
 
 	for _, buf in ipairs(bufs) do
-		local listed = vim.api.nvim_buf_get_option(buf, "buflisted")
-		local modifiable = vim.api.nvim_buf_get_option(buf, "modifiable")
-		local modified = vim.api.nvim_buf_get_option(buf, "modified")
+		local listed = vim.api.nvim_get_option_value("buflisted", { buf = buf })
+		local modifiable = vim.api.nvim_get_option_value("modifiable", { buf = buf })
+		local modified = vim.api.nvim_get_option_value("modified", { buf = buf })
 		if buf ~= current_buf and listed and modifiable and not modified then
 			vim.api.nvim_buf_delete(buf, {})
 		end

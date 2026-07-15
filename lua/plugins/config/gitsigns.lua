@@ -35,7 +35,7 @@ return function()
 			map("n", "=v", gs.preview_hunk_inline)
 			map("n", "=t", function()
 				-- local bufs = vim.tbl_filter(function(b)
-				-- 	return vim.api.nvim_buf_get_option(b, "filetype") ~= "git"
+				-- 	return vim.api.nvim_get_option_value("filetype", { buf = b }) ~= "git"
 				-- end, vim.api.nvim_list_bufs())
 				gs.setqflist("all")
 			end)

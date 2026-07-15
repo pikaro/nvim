@@ -15,8 +15,8 @@ return function(...)
 	vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
 
 	-- Set the buffer as not modifiable and remove the filetype
-	vim.api.nvim_buf_set_option(buf, "modifiable", false)
-	vim.api.nvim_buf_set_option(buf, "filetype", "")
+	vim.api.nvim_set_option_value("modifiable", false, { buf = buf })
+	vim.api.nvim_set_option_value("filetype", "", { buf = buf })
 
 	-- Set a name for the new buffer
 	vim.api.nvim_buf_set_name(buf, "[Output]")

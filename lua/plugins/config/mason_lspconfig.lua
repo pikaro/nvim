@@ -22,7 +22,6 @@ return function()
 			"pyright",
 			"ruff",
 			"rust_analyzer",
-			"terraformls",
 			"texlab",
 			"tofu_ls",
 			"ts_ls",

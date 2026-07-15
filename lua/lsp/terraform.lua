@@ -1,9 +1,8 @@
 return {
 	lsp = "tofu_ls",
-	filetypes = { "terraform", "terraform-vars", "terraform-test" },
-	options = {
-		single_file_support = false,
-	},
+	filetypes = { "opentofu", "opentofu-vars", "terraform", "terraform-vars", "terraform-test" },
+	root_markers = { ".terraform", ".git", ".terraform.lock.hcl", "main.tf", "variables.tf" },
+	workspace_required = true,
 	on_attach = function(client, bufnr)
 		require("treesitter-terraform-doc").setup({
 			command_name = "OpenDoc",

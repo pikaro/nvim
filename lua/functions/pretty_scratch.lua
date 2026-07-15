@@ -2,9 +2,9 @@ return function(data)
 	vim.cmd("new")
 	local buf = vim.api.nvim_get_current_buf()
 
-	vim.api.nvim_buf_set_option(buf, "buftype", "nofile")
-	vim.api.nvim_buf_set_option(buf, "bufhidden", "wipe")
-	vim.api.nvim_buf_set_option(buf, "swapfile", false)
+	vim.api.nvim_set_option_value("buftype", "nofile", { buf = buf })
+	vim.api.nvim_set_option_value("bufhidden", "wipe", { buf = buf })
+	vim.api.nvim_set_option_value("swapfile", false, { buf = buf })
 
 	local current_line = ""
 	local line_num = 0

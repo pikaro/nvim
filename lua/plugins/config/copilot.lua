@@ -5,9 +5,13 @@ return function()
 		return
 	end
 
+	if context.system == "work" then
+		return
+	end
+
 	require("copilot").setup({
 		suggestion = {
-			auto_trigger = true,
+			auto_trigger = false,
 			keymap = {
 				accept = "<a-cr>",
 				accept_line = "<a-s-cr>",

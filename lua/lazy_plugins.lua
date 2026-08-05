@@ -97,9 +97,16 @@ local plugins = {
 		config = "noice",
 	},
 	{
-		"windwp/nvim-autopairs",
+		"saghen/blink.pairs",
+		version = "*",
 		event = "InsertEnter",
-		config = "autopairs",
+		-- Compile the checked-out source instead of downloading a release binary.
+		build = function()
+			require("blink.pairs").build():pwait(60000)
+		end,
+		dependencies = { "saghen/blink.lib" },
+		opts = "blink",
+		config = "blink_pairs",
 	},
 	{
 		"nvim-telescope/telescope.nvim",
@@ -137,12 +144,12 @@ local plugins = {
 		},
 		build = ':lua require("go.install").update_all_sync()',
 	},
-	{
-		"folke/which-key.nvim",
-		cond = is_interactive,
-		opts = "whichkey",
-		event = "VeryLazy",
-	},
+	-- {
+	-- 	"folke/which-key.nvim",
+	-- 	cond = is_interactive,
+	-- 	opts = "whichkey",
+	-- 	event = "VeryLazy",
+	-- },
 	{
 		"folke/todo-comments.nvim",
 		dependencies = { "nvim-lua/plenary.nvim" },

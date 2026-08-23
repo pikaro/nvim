@@ -5,7 +5,7 @@ return function()
 		return
 	end
 
-	if context.system == "work" then
+	if not context.system.copilot then
 		return
 	end
 

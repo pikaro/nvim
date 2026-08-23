@@ -191,6 +191,12 @@ local plugins = {
 		"nvim-telescope/telescope-ui-select.nvim",
 		dependencies = { "nvim-telescope/telescope.nvim" },
 	},
+	{
+		"ggml-org/llama.vim",
+		init = function()
+			vim.g.llama_config = require("plugins.options.llama")
+		end,
+	},
 }
 
 for _, v in ipairs(plugins) do

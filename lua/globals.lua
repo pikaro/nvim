@@ -1,6 +1,16 @@
 local systems = {
-	["dre-mbp"] = "work",
-	["dre-mba"] = "personal",
+	["dre-mbp"] = {
+		name = "work",
+		copilot = false,
+	},
+	["dre-mba"] = {
+		name = "personal",
+		copilot = true,
+	},
+	["windows"] = {
+		name = "windows",
+		copilot = false,
+	},
 }
 
 _G.context = {

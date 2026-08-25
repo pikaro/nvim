@@ -96,18 +96,18 @@ local plugins = {
 		dependencies = { "MunifTanjim/nui.nvim", "rcarriga/nvim-notify" },
 		config = "noice",
 	},
-	{
-		"saghen/blink.pairs",
-		version = "*",
-		event = "InsertEnter",
-		-- Compile the checked-out source instead of downloading a release binary.
-		build = function()
-			require("blink.pairs").build():pwait(60000)
-		end,
-		dependencies = { "saghen/blink.lib" },
-		opts = "blink",
-		config = "blink_pairs",
-	},
+	-- {
+	-- 	"saghen/blink.pairs",
+	-- 	version = "*",
+	-- 	event = "InsertEnter",
+	-- 	-- Compile the checked-out source instead of downloading a release binary.
+	-- 	build = function()
+	-- 		require("blink.pairs").build():pwait(60000)
+	-- 	end,
+	-- 	dependencies = { "saghen/blink.lib" },
+	-- 	opts = "blink",
+	-- 	config = "blink_pairs",
+	-- },
 	{
 		"nvim-telescope/telescope.nvim",
 		dependencies = { "nvim-lua/plenary.nvim" },
@@ -196,6 +196,12 @@ local plugins = {
 		init = function()
 			vim.g.llama_config = require("plugins.options.llama")
 		end,
+	},
+	{
+		"altermo/ultimate-autopair.nvim",
+		event = { "InsertEnter", "CmdlineEnter" },
+		branch = "v0.6", --recommended as each new version will have breaking changes
+		opts = "autopairs",
 	},
 }
 

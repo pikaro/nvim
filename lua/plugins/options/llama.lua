@@ -1,4 +1,6 @@
-if context.system.copilot then
+local pidfile = "/tmp/nvim-agent.pid"
+
+if context.system.copilot or not vim.uv.fs_stat(pidfile) then
 	return {
 		auto_fim = false,
 		enable_at_startup = false,

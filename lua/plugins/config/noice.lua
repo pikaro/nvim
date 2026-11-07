@@ -39,6 +39,12 @@ return function()
 				},
 				opts = { skip = true },
 			},
+			{
+				filter = {
+					find = "No coverage file exists",
+				},
+				opts = { skip = true },
+			},
 		},
 		views = {
 			notify = {
